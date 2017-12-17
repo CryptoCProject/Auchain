@@ -4,7 +4,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class T {
+public class Tools {
     
     public static String SUCCESS = "1";
     public static String NOT_SUCCESS = "2";
@@ -28,6 +28,10 @@ public class T {
     
     public static String PRIVATE_KEY = " i";
     
+    /*
+    if you want to send something (for example):
+    Tools.getJson(new String[]{"n", ui.getName(), "p", hash.getHashedCode(ui.getPwd()), "e", ui.getEmail()}).toString());
+    */
     public static JSONObject getJson (String ... strings) {
         JSONObject jo = new JSONObject();
         HashMap <String, String> map = new HashMap<>();
