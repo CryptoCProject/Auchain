@@ -1,4 +1,4 @@
-package general;
+package auctioneum.utils.general;
 
 import java.util.HashMap;
 import org.json.JSONException;
