@@ -30,7 +30,7 @@ public class Tools {
     
     /*
     if you want to send something (for example):
-    Tools.getJson(new String[]{"n", ui.getName(), "p", hash.getHashedCode(ui.getPwd()), "e", ui.getEmail()}).toString());
+    client.sendMessage(T.SIGN_UP + T.getJson(new String[]{"n", ui.getName(), "p", hash.getHashedCode(ui.getPwd()), "e", ui.getEmail()}).toString());
     */
     public static JSONObject getJson (String ... strings) {
         JSONObject jo = new JSONObject();
