@@ -1,8 +1,8 @@
 package auctioneum.utils.keys;
 
-public class Validator {
+public class Verifier {
     
-    public boolean validateSignatures() {
+    public boolean verifySignature() {
         return false;
     }
 }

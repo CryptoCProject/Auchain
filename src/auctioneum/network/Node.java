@@ -3,6 +3,7 @@ package auctioneum.network;
 import auctioneum.blockchain.Account;
 import auctioneum.blockchain.Block;
 import auctioneum.blockchain.BlockChain;
+import auctioneum.blockchain.Transaction;
 import auctioneum.utils.files.FileManager;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ public class Node implements Serializable{
 
     /** Blockchain copy **/
     private BlockChain blockChain;
+
+    /** Transaction Pool **/
+    private List<Transaction> txPool;
 
     /** Node's peers **/
     private List<Node> peers;
@@ -51,20 +55,36 @@ public class Node implements Serializable{
         this.transactionsPort = Settings.TRANSACTIONS_PORT;
         this.account = account;
         this.fileManager = new FileManager();
-        this.peers = new ArrayList<>();
+        this.peers = Settings.PEERS;
         this.validationServer = new Server(this, Server.ServiceType.VALIDATIONS);
         this.transactionServer = new Server(this, Server.ServiceType.TRANSACTIONS);
         this.blockChain = this.updateCopy();
+        this.txPool = new ArrayList<>();
         this.transactionServer.start();
         this.validationServer.start();
 
     }
 
-
+    public void connect(){}
 
     public void addBlock(Block validBlock){ this.blockChain.add(validBlock); }
 
-    public void sendTransaction(Node target){}
+    public void addTransaction(Transaction transaction){ this.txPool.add(transaction); }
+
+    public boolean hasTransaction(Transaction transaction){ return this.getTxPool().contains(transaction); }
+
+    public void sendTransaction(Transaction transaction, Node target){
+        try{
+            Socket connection = new Socket(target.getIp(),target.getTransactionsPort());
+            ObjectOutputStream oos = new ObjectOutputStream(connection.getOutputStream());
+            oos.writeObject(transaction);
+            oos.flush();
+            oos.close();
+            connection.close();
+        }catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+    }
 
     public void sendForValidation(Block block, Node target){
         try {
@@ -166,6 +186,14 @@ public class Node implements Serializable{
 
     public void setPeers(List<Node> peers) {
         this.peers = peers;
+    }
+
+    public List<Transaction> getTxPool() {
+        return this.txPool;
+    }
+
+    public void setTxPool(List<Transaction> txPool) {
+        this.txPool = txPool;
     }
 
 

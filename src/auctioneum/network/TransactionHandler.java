@@ -1,7 +1,6 @@
 package auctioneum.network;
 
 import auctioneum.blockchain.Transaction;
-
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
@@ -25,13 +24,10 @@ public class TransactionHandler implements Runnable{
         try {
             ObjectInputStream ois = new ObjectInputStream(connection.getInputStream());
             this.transaction = (Transaction) ois.readObject();
-            if (this.transaction.isValid()) {
-                if (this.owner instanceof Miner){
-                    Miner self = (Miner) this.owner;
-                    self.addTransaction(this.transaction);
-                }
+            if (!this.owner.hasTransaction(this.transaction) && this.transaction.isValid()) {
+                this.owner.addTransaction(this.transaction);
                 for (Node peer : this.owner.getPeers()){
-                    this.owner.sendTransaction(peer);
+                    this.owner.sendTransaction(this.transaction,peer);
                 }
             }
         }catch (Exception e){

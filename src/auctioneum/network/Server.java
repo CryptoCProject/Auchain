@@ -73,6 +73,7 @@ public class Server {
                     }
                     default:{
                         service = new Thread(new ValidationHandler(this.owner,this.clientSocket));
+                        break;
                     }
                 }
                 service.start();

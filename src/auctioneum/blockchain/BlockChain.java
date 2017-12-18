@@ -16,7 +16,7 @@ public class BlockChain {
         this.blocks.push(block);
     }
 
-    public int size(){return this.blocks.get(0).getNumber();}
+    public int size(){return this.blocks.get(0).getNumber()+1;}
 
     //if there are new blocks take them and validate them(for miners)
     public List<Block> diff(BlockChain other){

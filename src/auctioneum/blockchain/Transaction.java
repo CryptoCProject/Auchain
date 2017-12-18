@@ -1,48 +1,53 @@
 package auctioneum.blockchain;
 
 import java.io.Serializable;
-import auctioneum.utils.keys.Validator;
+import auctioneum.utils.keys.Verifier;
 
 
 public class Transaction implements Serializable{
 
     private static final long serialVersionUID = -1565349679238127979L;
 
-    private int id;// is the user's id plus a sequence number based on the transactions he makes
+    /** Transaction identifier **/
+    private String id;
 
-    private String to;//the receiver's address
-    
-    private String from;//the sender's address
+    /** Receiver's address **/
+    private String to;
 
-    private float value;// value of the transaction
+    /** Sender's address **/
+    private String from;
 
-    private String receiver_signature;
+    /** Amount to be transfered **/
+    private float value;
 
-    private String sender_signature;
+    /** Transaction signature **/
+    private String signature;
 
-    public Transaction(int id, String to, float value, String receiver_signature, String sender_signature) {
+    public Transaction(String id, String from, String to, float value, String signature) {
         this.id = id;
+        this.from = from;
         this.to = to;
         this.value = value;
-        this.receiver_signature = receiver_signature;
-        this.sender_signature = sender_signature;
+        this.signature = signature;
     }
+
     /* valid signatures, valid transaction id, balance check */
     public boolean isValid(){
-        Validator v = new Validator();
-       if(v.validateSignatures() && Account.getBalance(from) >= this.value)
+        Verifier v = new Verifier();
+       if(v.verifySignature() && Account.getBalance(this.from) >= this.value)
            return true;
        else
            return false;
      }
 
+
     /**--------------Accessors-Mutators------------------**/
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -63,7 +68,12 @@ public class Transaction implements Serializable{
     }
     
     public String toString() {
-        return this.id+" "+this.from+" "+this.to+" "+this.receiver_signature+" "+this.sender_signature+ " "+this.value;
+        String info = "";
+        info += "ID: "+ this.id;
+        info += "\nFrom: "+ this.from;
+        info += "\nTo: "+ this.to;
+        info += "\nValue: "+ this.value;
+        return info;
     }
 
 }

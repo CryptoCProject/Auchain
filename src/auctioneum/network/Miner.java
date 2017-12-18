@@ -3,47 +3,54 @@ package auctioneum.network;
 import auctioneum.blockchain.Account;
 import auctioneum.blockchain.Block;
 import auctioneum.blockchain.Transaction;
-
 import auctioneum.utils.hashing.SHA3_256;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.math.BigInteger;
 import java.util.List;
 
 public class Miner extends Node {
 
-    /** Unvalidated Transactions **/
-    private List<Transaction> transactions;
+    private int difficulty;
 
+    private boolean stop;
 
-
-    public Miner(Account account) throws RemoteException{
+    public Miner(Account account){
         super(account, Settings.IP);
-        this.transactions = new ArrayList<>();
+        this.stop = false;
+    }
+
+
+    public Block createBlock(int size, int difficulty){
+        int number = this.getBlockChain().size()+1;
+        String selfAddress = this.getAccount().getAddress();
+        List<Transaction> txsIncluded = this.getTxPool().subList(0,size);
+        return new Block(BigInteger.ZERO,number,difficulty,selfAddress,txsIncluded);
     }
 
 
 
-    public void createBlock(int size){}
-
-    public void addTransaction(Transaction transaction){ this.transactions.add(transaction); }
-
     private Block mine(Block block){
-        while (!SHA3_256.hash(block.toString()).contains("k")){
-            block.setNonce(block.getNonce()+1);
+        while (!this.stop && this.count("0", SHA3_256.hash(block.getData())) != difficulty){
+            block.setNonce(block.getNonce().add(BigInteger.ONE));
         }
         return block;
     }
 
+    public void start(){}
 
-    /**------------Accessors-Mutators---------------**/
+    public void stop(){ this.stop = true; }
 
-    public List<Transaction> getTransactions() {
-        return this.transactions;
-    }
+    private int count(final String string, final String substring){
+        int count = 0;
+        int idx = 0;
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+        while ((idx = string.indexOf(substring, idx)) != -1)
+        {
+            idx++;
+            count++;
+        }
+
+        return count;
     }
 
 

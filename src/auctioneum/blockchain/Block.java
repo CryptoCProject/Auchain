@@ -1,6 +1,7 @@
 package auctioneum.blockchain;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import auctioneum.utils.hashing.SHA3_256;
 
@@ -9,38 +10,58 @@ public class Block implements Serializable{
 
     private static final long serialVersionUID = -8355673521334364077L;
 
-    private String hash;//contains all fields of Block hashed
+    /** Hash value of block **/
+    private String hash;
 
-    private String beneficiary;//miner that solves the problem/ validate the transaction
+    /** Nonce value **/
+    private BigInteger nonce;
 
-    private int number;//last block's number on the blockchain
+    /** Blockchain height **/
+    private int number;
 
-    private String nonce;//nonce number of the current block
+    /** Block difficulty **/
+    private int difficulty;
 
-    private long timestamp;//when this block was created
+    /** Generation timestamp **/
+    private long timestamp;
 
-    private List<Transaction> transactions;//transactions included in the block
+    /** Public address of the one who mined it **/
+    private String beneficiary;
+
+    /** Transactions contained in the block **/
+    private List<Transaction> transactions;
 
 
-    public Block(String hash, String beneficiary, int number, String nonce, long timestamp, List<Transaction> transactions){
-        this.hash = hash;
+    public Block(BigInteger nonce, int number, int difficulty, String beneficiary, List<Transaction> transactions){
         this.beneficiary = beneficiary;
         this.number = number;
         this.nonce = nonce;
-        this.timestamp = timestamp;
+        this.difficulty = difficulty;
+        this.timestamp = System.currentTimeMillis();
         this.transactions = transactions;
     }
 
-    public boolean isValid(){ 
-        String block_info = this.beneficiary +" "+ this.nonce+" "+this.number +" "+ this.timestamp+" "+this.transactions.get(0).toString();
-        if(!(SHA3_256.hash(block_info) == hash))
+    public boolean isValid(){
+        if(!(SHA3_256.hash(this.getData()).equals(this.hash))) {
             return false;
-        for(Transaction tr : this.transactions){
-            if(!tr.isValid())
+        }
+        for(Transaction transaction : this.transactions){
+            if(!transaction.isValid())
                 return false;
         }
         return true;
     }
+
+    public String getData(){
+        String blockData = "";
+        blockData += "Number: "+ this.number;
+        blockData += "\nNonce: "+ this.nonce;
+        blockData += "\nBeneficiary: "+ this.beneficiary;
+        blockData += "\nTimestamp: "+ this.timestamp;
+        blockData += "\nTransactions: "+ this.transactions;
+        return blockData;
+    }
+
 
     /**--------------Accessors-Mutators------------------**/
 
@@ -68,20 +89,12 @@ public class Block implements Serializable{
         this.number = number;
     }
 
-    public String getNonce() {
+    public BigInteger getNonce() {
         return this.nonce;
     }
 
-    public void setNonce(String nonce) {
+    public void setNonce(BigInteger nonce) {
         this.nonce = nonce;
-    }
-
-    public long getTimestamp() {
-        return this.timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public List<Transaction> getTransactions() {

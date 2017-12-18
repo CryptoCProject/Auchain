@@ -1,10 +1,9 @@
 package auctioneum.blockchain;
 
 public class Account {
-    
-    private String username;
-    
-    private String password;
+
+    /** Signifies the number of transactions made by this account **/
+    private int nonce;
 
     /** Public identified of the account **/
     private String address;
@@ -15,11 +14,14 @@ public class Account {
     public Account(){}
 
 
-    /**--------------Accessors-Mutators-------------------**/
-    
     static float getBalance(String address) {
         return 0.0F;
     }
+
+
+
+
+    /**--------------Accessors-Mutators-------------------**/
 
     public String getAddress() { return this.address; }
 
@@ -34,20 +36,5 @@ public class Account {
     public void setBalance(float balance) {
         this.balance = balance;
     }
-    
-    public String getUsername() {
-        return this.username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
