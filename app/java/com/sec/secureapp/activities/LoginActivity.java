@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
     }
 
 }

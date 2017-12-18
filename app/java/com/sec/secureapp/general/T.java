@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.sec.secureapp.client.SSLclient;
 import com.sec.secureapp.database.DB;
+import com.sec.secureapp.security.Keys;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +18,9 @@ public class T {
 
     public static DB DB;
 
-    public static String SERVER_IP = "zafeiratosv.ddns.net";
+    public static String SERVER_IP = "192.168.1.2";
     public static int SERVER_PORT = 54321;
+    public static String CERT_NAME = "sslsec.bks";
 
     public static String SUCCESS = "1";
     public static String NOT_SUCCESS = "2";
@@ -25,7 +28,6 @@ public class T {
     public static String WRONG_CREDENTIALS = "4";
     public static String WRONG_OTP = "5";
     public static String OTP_ERROR = "6";
-    public static String PRIVATE_KEY_ACK = "7";
 
     public static String SIGN_UP = " a";
     public static String SIGN_UP_CONFIRM = " b";
@@ -38,8 +40,6 @@ public class T {
 
     public static String MAIN = " g";
     public static String MAIN_CONFIRM = " h";
-
-    public static String PRIVATE_KEY = " i";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;
