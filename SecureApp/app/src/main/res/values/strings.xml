@@ -27,4 +27,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_otp">OtpActivity</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <!-- MainActivity Menu Items -->
+    <string name="menu_profile">Profile</string>
+    <string name="menu_logout">Logout</string>
+
+    <!-- Auction Details-->
+    <string name="auction_price">Price: $%.2f</string>
+
 </resources>

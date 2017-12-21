@@ -1,5 +1,12 @@
 package com.sec.secureapp.client;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+
+import com.sec.secureapp.general.T;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,16 +15,12 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.security.KeyStore;
 import java.util.Arrays;
+
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import com.sec.secureapp.general.T;
 
 public class SSLclient extends Thread {
 
@@ -76,10 +79,10 @@ public class SSLclient extends Thread {
 
             SSLSocketFactory ssf = sslContext.getSocketFactory();
             connection = (SSLSocket) ssf.createSocket(InetAddress.getByName(T.SERVER_IP), T.SERVER_PORT);
-            String[] enCiphersuite=connection.getEnabledCipherSuites();
-            System.out.println("Enabled ciphersuites are: "+ Arrays.toString(enCiphersuite));
+            String[] enCiphersuite = connection.getEnabledCipherSuites();
+            System.out.println("Enabled ciphersuites are: " + Arrays.toString(enCiphersuite));
             connection.startHandshake();
-            System.out.println("Session ciphersuite is: "+connection.getSession().getCipherSuite() );
+            System.out.println("Session ciphersuite is: " + connection.getSession().getCipherSuite());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,13 +137,12 @@ public class SSLclient extends Thread {
         try {
             System.out.println("Message sent: " + object);
             int counter = 0;
-            for (;;) {
+            for (; ; ) {
                 if (out != null) {
                     out.writeObject(object);
                     out.flush();
                     break;
-                }
-                else if (counter == 30) {
+                } else if (counter == 30) {
                     System.out.println("Timeout while trying to send message. Output stream probably is not open.");
                     break;
                 }
@@ -170,14 +172,11 @@ public class SSLclient extends Thread {
                         String s = (String) obj;
                         if (s.startsWith(T.SIGN_UP_CONFIRM)) {
                             T.SIGN_UP_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.LOG_IN_CONFIRM)) {
+                        } else if (s.startsWith(T.LOG_IN_CONFIRM)) {
                             T.LOG_IN_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.OTP_CONFIRM)) {
+                        } else if (s.startsWith(T.OTP_CONFIRM)) {
                             T.OTP_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.MAIN_CONFIRM)) {
+                        } else if (s.startsWith(T.MAIN_CONFIRM)) {
                             T.MAIN_MESSAGE = s.substring(2);
                         }
                     }
