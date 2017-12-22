@@ -1,3 +1,3 @@
 # Auchain
 Blockchain system supporting auctions.
-(Project for Msc course Cryptography & Applications - Winter Semester 2017)
+(Project for MSc course Cryptography & Applications - Fall Semester 2017)
