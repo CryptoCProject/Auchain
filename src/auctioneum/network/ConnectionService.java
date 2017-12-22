@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ConnectionService implements Runnable{
 
-    private static final int NODES_THRES_DOWN = 5;
+    private static final int MIN_NODES_NUM = 5;
 
     private Node owner;
 
@@ -28,7 +28,7 @@ public class ConnectionService implements Runnable{
             if (!self.getAdvertisedPeers().isEmpty()){
                 ObjectOutputStream oos = new ObjectOutputStream(this.connection.getOutputStream());
                 int nodesKept = self.getAdvertisedPeers().size();
-                int peersToSend = nodesKept > NODES_THRES_DOWN? (int)(0.1*nodesKept) : nodesKept;
+                int peersToSend = nodesKept > MIN_NODES_NUM ? (int)(0.1*nodesKept) : nodesKept;
                 oos.writeObject(peersToSend);
                 oos.flush();
                 for (int i=0; i<peersToSend; i++){
