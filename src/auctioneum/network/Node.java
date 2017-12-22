@@ -68,6 +68,14 @@ public class Node implements Serializable{
 
     public void updatePeers(){}
 
+    /**
+     * Leave auctioneum network
+     */
+    public void leave(){
+        this.transactionServer.stop();
+        this.validationServer.stop();
+    }
+
     /**-------------------------------- Transactions --------------------------------**/
 
     public void addTransaction(Transaction transaction){ synchronized (this.txPool){this.txPool.add(transaction);} }
@@ -131,15 +139,6 @@ public class Node implements Serializable{
     /**--------------------------------- Blockchain ---------------------------------**/
 
     public BlockChain updateCopy(){return null;}
-
-
-    /**
-     * Leave auctioneum network
-     */
-    public void leave(){
-        this.transactionServer.stop();
-        this.validationServer.stop();
-    }
 
 
     /**----------------------------- Accessors-Mutators -----------------------------**/
