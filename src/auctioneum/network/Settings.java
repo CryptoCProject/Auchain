@@ -19,8 +19,6 @@ public class Settings {
 
     public static int VALIDATIONS_PORT;
 
-    public static List<Node> PEERS;
-
     public static List<Regulator> REGULATORS;
 
 
@@ -32,7 +30,6 @@ public class Settings {
         }
         TRANSACTIONS_PORT = 4572;
         VALIDATIONS_PORT = 8338;
-        PEERS = new ArrayList<>();
         REGULATORS = new ArrayList<>();
     }
 

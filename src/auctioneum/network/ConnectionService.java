@@ -32,7 +32,10 @@ public class ConnectionService implements Runnable{
                 oos.writeObject(peersToSend);
                 oos.flush();
                 for (int i=0; i<peersToSend; i++){
-                    oos.writeObject(self.getAdvertisedPeers().values().toArray()[i]);
+                    Node next = (Node) self.getAdvertisedPeers().keySet().toArray()[i];
+                    int timesSent = self.getAdvertisedPeers().get(next)+1;
+                    self.getAdvertisedPeers().put(next,timesSent);
+                    oos.writeObject(next);
                     oos.flush();
                 }
                 oos.close();

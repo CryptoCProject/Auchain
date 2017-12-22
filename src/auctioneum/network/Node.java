@@ -53,7 +53,7 @@ public class Node implements Serializable{
         this.transactionsPort = Settings.TRANSACTIONS_PORT;
         this.account = account;
         this.fileManager = new FileManager();
-        this.peers = Settings.PEERS;
+        this.peers = new ArrayList<>();
         this.validationServer = new Server<ValidationService>(this,this.validationsPort,"VdsServer",ValidationService.class);
         this.transactionServer = new Server<TransactionService>(this, this.transactionsPort,"TxsServer",TransactionService.class);
         this.blockChain = this.updateCopy();
@@ -62,7 +62,9 @@ public class Node implements Serializable{
 
     /**----------------------------------- Network ----------------------------------**/
 
-    public void connect(){}
+    public void connect(){
+        //Channel<Node>
+    }
 
     public void updatePeers(){}
 

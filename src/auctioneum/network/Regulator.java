@@ -2,30 +2,27 @@ package auctioneum.network;
 
 
 import auctioneum.blockchain.Account;
-import auctioneum.blockchain.Block;
 
-import java.net.Socket;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /** Responsible for connections,updates in the network **/
 public class Regulator extends Node{
 
-    private Map<Integer,Node> advertisedPeers;
+    private Map<Node,Integer> advertisedPeers;
 
     public Regulator(Account account){
         super(account);
-        advertisedPeers = new TreeMap<>();
+        advertisedPeers = new HashMap<>();
     }
 
 
 
-    public Map<Integer, Node> getAdvertisedPeers() {
+    public Map<Node, Integer> getAdvertisedPeers() {
         return this.advertisedPeers;
     }
 
-    public void setAdvertisedPeers(Map<Integer, Node> advertisedPeers) {
+    public void setAdvertisedPeers(Map<Node, Integer> advertisedPeers) {
         this.advertisedPeers = advertisedPeers;
     }
 
