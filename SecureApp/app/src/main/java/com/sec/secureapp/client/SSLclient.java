@@ -7,12 +7,15 @@ import android.os.Message;
 
 import com.sec.secureapp.general.T;
 
+import org.json.JSONArray;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.security.KeyStore;
 import java.util.Arrays;
 
@@ -26,7 +29,7 @@ public class SSLclient extends Thread {
 
     private boolean clientRunning;
     private Context context;
-    private SSLSocket connection = null; // socket to make the connection between Client-Server
+    private Socket connection = null; // socket to make the connection between Client-Server
     private ObjectInputStream in = null; //stream for message that come up
     private ObjectOutputStream out = null; //stream for messages that go to client
     private myHandler handler; //handler is used to handle the messages are coming
@@ -61,28 +64,7 @@ public class SSLclient extends Thread {
 
         try {
             System.out.println("You are conected");
-            char[] keystorePwdArray = "sslsec".toCharArray();
-            char[] keystorePwdArray2 = "sslsec".toCharArray();
-
-            KeyStore keyStore = KeyStore.getInstance("BKS");
-            InputStream is = this.context.getAssets().open(T.CERT_NAME);
-            keyStore.load(is, keystorePwdArray);
-
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            kmf.init(keyStore, keystorePwdArray2);
-
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(keyStore);
-
-            SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-
-            SSLSocketFactory ssf = sslContext.getSocketFactory();
-            connection = (SSLSocket) ssf.createSocket(InetAddress.getByName(T.SERVER_IP), T.SERVER_PORT);
-            String[] enCiphersuite = connection.getEnabledCipherSuites();
-            System.out.println("Enabled ciphersuites are: " + Arrays.toString(enCiphersuite));
-            connection.startHandshake();
-            System.out.println("Session ciphersuite is: " + connection.getSession().getCipherSuite());
+            connection = new Socket(InetAddress.getByName("zafeiratosv.ddns.net"), 54321);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,12 +154,20 @@ public class SSLclient extends Thread {
                         String s = (String) obj;
                         if (s.startsWith(T.SIGN_UP_CONFIRM)) {
                             T.SIGN_UP_MESSAGE = s.substring(2);
+                        } else if (s.startsWith(T.PRIVATE_KEY)) {
+                            T.SIGN_UP_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.LOG_IN_CONFIRM)) {
                             T.LOG_IN_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.OTP_CONFIRM)) {
                             T.OTP_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.MAIN_CONFIRM)) {
                             T.MAIN_MESSAGE = s.substring(2);
+                        }
+                        else if (s.startsWith(T.AUCTIONS_LIST)) {
+                            T.AUCTIONS_MESSAGE = s.substring(2);
+                        }
+                        else if (s.startsWith(T.AUCTIONS_NULL)) {
+                            T.AUCTIONS_MESSAGE = "null";
                         }
                     }
 

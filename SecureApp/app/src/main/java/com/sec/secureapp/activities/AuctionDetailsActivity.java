@@ -28,6 +28,7 @@ public class AuctionDetailsActivity extends BaseActivity {
             binding.auctionObject.setText(bundle.getString("object"));
             binding.auctionAuctioneer.setText(bundle.getString("auctioneer"));
             binding.auctionPrice.setText(getString(R.string.auction_price, bundle.getDouble("price")));
+            binding.auctionParticipate.setText((bundle.getBoolean("running") ? "Bid" : "Participate"));
 
             binding.auctionParticipate.setOnClickListener(new View.OnClickListener() {
                 @Override

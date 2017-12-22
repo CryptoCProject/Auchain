@@ -35,4 +35,15 @@
     <!-- Auction Details-->
     <string name="auction_price">Price: $%.2f</string>
 
+    <!-- Create Auctions -->
+    <string name="create_auction_type">Choose Auction Type: </string>
+    <string name="create_auction_auctioneer">Auctioneer: </string>
+    <string name="create_auction_object">Object: </string>
+    <string name="create_auction_choose_object">Choose object</string>
+    <string name="create_auction_requirements">Requirements: </string>
+    <string name="create_auction_price">Initial Price: </string>
+    <string name="create_auction_participants">Minimum Participants: </string>
+    <string name="create_auction_duration">Duration: </string>
+    <string name="create_auction_submit">Submit</string>
+
 </resources>

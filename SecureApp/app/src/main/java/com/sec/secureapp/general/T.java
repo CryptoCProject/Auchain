@@ -28,6 +28,9 @@ public class T {
     public static String WRONG_CREDENTIALS = "4";
     public static String WRONG_OTP = "5";
     public static String OTP_ERROR = "6";
+    public static String PRIVATE_KEY_ACK = "7";
+    public static String AUCTION_SUCCESS= "8";
+    public static String AUCTION_ERROR= "9";
 
     public static String SIGN_UP = " a";
     public static String SIGN_UP_CONFIRM = " b";
@@ -41,10 +44,20 @@ public class T {
     public static String MAIN = " g";
     public static String MAIN_CONFIRM = " h";
 
+    public static String PRIVATE_KEY = " i";
+
+    public static String CREATE_AUCTION = " j";
+    public static String CREATE_AUCTION_CONFIRM = " k";
+
+    public static String AUCTIONS = " l";
+    public static String AUCTIONS_LIST = " m";
+    public static String AUCTIONS_NULL = " n";
+
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;
     public static String OTP_MESSAGE = null;
     public static String MAIN_MESSAGE = null;
+    public static String AUCTIONS_MESSAGE = null;
 
     public static void VIEW_TOAST(final Context con, final String toast, final int dur) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {

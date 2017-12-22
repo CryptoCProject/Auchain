@@ -3,7 +3,10 @@ package com.sec.secureapp.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +20,9 @@ import android.widget.Toast;
 
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.RecyclerViewBinding;
+import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
+import com.sec.secureapp.general.UserInfo;
 
 import java.util.Random;
 
@@ -25,6 +30,8 @@ import java.util.Random;
 public class MyRecyclerViewFragment extends Fragment {
 
     RecyclerViewBinding binding;
+
+    BroadcastReceiver broadcastReceiver;
 
     private View view;
 
@@ -50,6 +57,19 @@ public class MyRecyclerViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.recycler_view, container, false);
 
+        IntentFilter intentFilter = new IntentFilter(
+                "com.sec.secureapp.GET_AUCTIONS");
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String[] info = intent.getStringArrayExtra("getAuctions");
+                System.out.print(info.toString());
+            }
+        };
+
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+
         setRecyclerView();
 
         return view;
@@ -71,6 +91,7 @@ public class MyRecyclerViewFragment extends Fragment {
                 mIntent.putExtra("object", auctionObject[position]);
                 mIntent.putExtra("auctioneer", auctionAuctioneer[position]);
                 mIntent.putExtra("price", auctionPrice[position]);
+                mIntent.putExtra("running", running);
                 T.VIEW_TOAST(getContext(), ""+running, Toast.LENGTH_SHORT);
                 startActivity(mIntent);
             }
@@ -84,15 +105,24 @@ public class MyRecyclerViewFragment extends Fragment {
         //TODO: Maybe move to AsyncTask if fetching is too slow
         //new MyAsyncTask(getActivity(), running).execute();
 
-        FetcData(running);
+        FetchData(running);
 
         MyAdapter adapter = new MyAdapter(getActivity(), auctionTitles, auctionObject, auctionAuctioneer, auctionPrice);
         recyclerView.setAdapter(adapter);// set adapter on recyclerview
 
     }
 
-    private void FetcData(boolean running){
+    /**
+     * auctioneer id
+     * auction type
+     * object name
+     * price
+     *
+     * @param running
+     */
+    private void FetchData(boolean running){
         Random r = new Random();
+        new InfoMessage(getContext(), T.AUCTIONS, new UserInfo("panagiotis", null, null, null, null)).start();
 
         for (int i = 0; i < 16; i++) {
             auctionTitles[i] = ( running ? "Running_Auction_" + i : "Open_Auction_"+i);

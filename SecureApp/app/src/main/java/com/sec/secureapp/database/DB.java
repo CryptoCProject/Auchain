@@ -34,19 +34,18 @@ public class DB extends SQLiteOpenHelper {
 
     public void createTables() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String CREATE_TABLE_KEYS = "CREATE TABLE IF NOT EXISTS Keys (myPrivateKey TEXT, serverPublicKey TEXT)";
+        String CREATE_TABLE_KEYS = "CREATE TABLE IF NOT EXISTS Keys (myPrivateKey TEXT)";
         db.execSQL(CREATE_TABLE_KEYS);
         db.close();
     }
 
     public void initializeValues() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "INSERT INTO Keys (myPrivateKey, serverPublicKey) VALUES(?, ?)";
+        String sql = "INSERT INTO Keys (myPrivateKey) VALUES(?)";
         SQLiteStatement insertStmt = db.compileStatement(sql);
         insertStmt.clearBindings();
         byte[] b = new byte[1024];
         insertStmt.bindBlob(1, b);
-        insertStmt.bindBlob(2, b);
         insertStmt.executeInsert();
         db.close();
         insertStmt.close();
@@ -57,19 +56,6 @@ public class DB extends SQLiteOpenHelper {
         try {
             ContentValues values = new ContentValues();
             values.put("myPrivateKey", pkFile);
-            db.update("Keys", values, null, null );
-            db.close();
-        } catch (Exception e) {
-            db.close();
-            e.printStackTrace();
-        }
-    }
-
-    public void setServerPublicKey(byte [] pkFile) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put("serverPublicKey", pkFile);
             db.update("Keys", values, null, null );
             db.close();
         } catch (Exception e) {
@@ -93,7 +79,8 @@ public class DB extends SQLiteOpenHelper {
         db.close();
         if(cursor.getCount() == 0){
             return null;
-        } else {
+        }
+        else {
             try{
                 File pkf = File.createTempFile("private", ".key");
                 FileOutputStream outputStream = new FileOutputStream(pkf);
@@ -105,42 +92,6 @@ public class DB extends SQLiteOpenHelper {
                 db.close();
                 cursor.close();
                 return privateKey;
-            }catch(Exception e){
-                e.printStackTrace();
-                db.close();
-                cursor.close();
-                return null;
-            }
-        }
-    }
-
-    public PublicKey getServerPublicKey() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "SELECT serverPublicKey FROM Keys";
-        Cursor cursor = db.rawQuery(sql, new String[] {});
-
-        byte[] pk = null;
-        if(cursor.moveToFirst()){
-            pk = cursor.getBlob(0);
-        }
-        if (cursor != null && !cursor.isClosed()) {
-            cursor.close();
-        }
-        db.close();
-        if(cursor.getCount() == 0){
-            return null;
-        } else {
-            try{
-                File pkf = File.createTempFile("public", ".key");
-                FileOutputStream outputStream = new FileOutputStream(pkf);
-                outputStream.write(pk);
-                outputStream.close();
-                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(pkf));
-                PublicKey publicKey = (PublicKey) inputStream.readObject();
-                inputStream.close();
-                db.close();
-                cursor.close();
-                return publicKey;
             }catch(Exception e){
                 e.printStackTrace();
                 db.close();

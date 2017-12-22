@@ -1,6 +1,7 @@
 package com.sec.secureapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,25 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, getLayoutResourceId());
+
+        binding.registerLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        binding.signinLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String n = binding.usernameLogin.getText().toString();
+                String p = binding.passwordLogin.getText().toString();
+                String otpId = String.valueOf(System.currentTimeMillis());
+                new InfoMessage(LoginActivity.this, T.LOG_IN, new UserInfo(n, p, null, otpId, null)).start();
+            }
+        });
     }
 
     @Override

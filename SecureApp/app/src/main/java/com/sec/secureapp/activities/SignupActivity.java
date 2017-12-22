@@ -3,6 +3,7 @@ package com.sec.secureapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 public class SignupActivity extends BaseActivity {
 
     EditText name, password, confirmPassword, email;
+    Button signup, cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,30 @@ public class SignupActivity extends BaseActivity {
         password = (EditText) findViewById(R.id.password_signup);
         confirmPassword = (EditText) findViewById(R.id.confirm_password_signup);
         email = (EditText) findViewById(R.id.email_signup);
+
+        signup = (Button) findViewById(R.id.signup_signup_button);
+        cancel = (Button) findViewById(R.id.cancel_signup_button);
+
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String n = name.getText().toString();
+                String p = password.getText().toString();
+                String c = confirmPassword.getText().toString();
+                String e = email.getText().toString();
+                if (isEverythingRight(n, p, c, e)) {
+                    new InfoMessage(SignupActivity.this, T.SIGN_UP, new UserInfo(n, p, e, null, null)).start();
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent setIntent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(setIntent);
+            }
+        });
 
     }
 

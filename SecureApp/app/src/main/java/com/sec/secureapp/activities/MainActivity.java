@@ -25,8 +25,6 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
-    //TODO: Make it Tabbed Activity (Open/Running Auctions)
-
     ActivityMainBinding binding;
 
     private static ViewPager viewPager;
