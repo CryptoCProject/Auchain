@@ -1,4 +1,5 @@
 /libs
 *.iml
 /.idea
+/out
 *.txt
