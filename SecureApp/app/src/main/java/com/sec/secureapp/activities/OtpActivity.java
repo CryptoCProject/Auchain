@@ -1,60 +1,47 @@
 package com.sec.secureapp.activities;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+
 import com.sec.secureapp.R;
+import com.sec.secureapp.databinding.ActivityOtpBinding;
 import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
 import com.sec.secureapp.general.UserInfo;
 
-public class OtpActivity extends BaseActivity {
+public class OtpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText otpText;
+    ActivityOtpBinding binding;
+
     String name;
 
-    Button otp_cancel, otp_continue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_otp);
 
         name = getIntent().getStringExtra("name");
-        otpText = (EditText) findViewById(R.id.otp);
 
-        otp_cancel = (Button) findViewById(R.id.cancel_otp_button);
-        otp_continue = (Button) findViewById(R.id.continue_otp_button);
-
-        otp_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent setIntent = new Intent(OtpActivity.this, LoginActivity.class);
-                startActivity(setIntent);
-                finish();
-            }
-        });
-
-        otp_continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String otp = otpText.getText().toString();
-                new InfoMessage(OtpActivity.this, T.OTP,new UserInfo(name, null, null, null, otp)).start();
-            }
-        });
+        binding.cancelOtpButton.setOnClickListener(this);
+        binding.continueOtpButton.setOnClickListener(this);
     }
 
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_otp;
+    public void onBackPressed() {
+        Intent setIntent = new Intent(this, LoginActivity.class);
+        startActivity(setIntent);
+        finish();
     }
 
     @Override
-    protected void clickButtons(View view) {
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.continue_otp_button: {
-                String otp = otpText.getText().toString();
+                String otp = binding.otp.getText().toString();
                 new InfoMessage(this, T.OTP,new UserInfo(name, null, null, null, otp)).start();
                 break;
             }
@@ -66,12 +53,4 @@ public class OtpActivity extends BaseActivity {
             }
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        Intent setIntent = new Intent(this, LoginActivity.class);
-        startActivity(setIntent);
-        finish();
-    }
-
 }

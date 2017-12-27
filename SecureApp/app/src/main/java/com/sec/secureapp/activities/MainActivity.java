@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +24,7 @@ import com.sec.secureapp.general.T;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityMainBinding binding;
 
@@ -41,7 +42,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, getLayoutResourceId());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         // change actionbar title
         setSupportActionBar(binding.toolbar);
@@ -75,12 +76,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent mIntent = new Intent(MainActivity.this, CreateAuctionActivity.class);
-                startActivity(mIntent);
-            }
-        });
+        binding.fab.setOnClickListener(this);
 
         edittextReceiver = new EditextReceiver();
         IntentFilter filter = new IntentFilter();
@@ -95,6 +91,16 @@ public class MainActivity extends BaseActivity {
         adapter.addFrag(new MyRecyclerViewFragment(false), false);
         adapter.addFrag(new MyRecyclerViewFragment(true), true);
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fab:
+                Intent mIntent = new Intent(MainActivity.this, CreateAuctionActivity.class);
+                startActivity(mIntent);
+                break;
+        }
     }
 
     //View Pager fragments setting adapter class
@@ -162,16 +168,6 @@ public class MainActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(edittextReceiver);
-    }
-
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_main;
-    }
-
-    @Override
-    protected void clickButtons(View view) {
-
     }
 
     class EditextReceiver extends BroadcastReceiver {

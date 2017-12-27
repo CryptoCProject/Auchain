@@ -31,7 +31,7 @@ public class MyRecyclerViewFragment extends Fragment {
 
     RecyclerViewBinding binding;
 
-    BroadcastReceiver broadcastReceiver;
+    AuctionReceiver auctionReceiver;
 
     private View view;
 
@@ -57,18 +57,10 @@ public class MyRecyclerViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.recycler_view, container, false);
 
-        IntentFilter intentFilter = new IntentFilter(
-                "com.sec.secureapp.GET_AUCTIONS");
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String[] info = intent.getStringArrayExtra("getAuctions");
-                System.out.print(info.toString());
-            }
-        };
-
-        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+        auctionReceiver = new AuctionReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.sec.secureapp.GET_AUCTIONS");
+        getActivity().registerReceiver(auctionReceiver, filter);
 
         setRecyclerView();
 
@@ -93,6 +85,7 @@ public class MyRecyclerViewFragment extends Fragment {
                 mIntent.putExtra("price", auctionPrice[position]);
                 mIntent.putExtra("running", running);
                 T.VIEW_TOAST(getContext(), ""+running, Toast.LENGTH_SHORT);
+                getActivity().unregisterReceiver(auctionReceiver);
                 startActivity(mIntent);
             }
 
@@ -122,7 +115,8 @@ public class MyRecyclerViewFragment extends Fragment {
      */
     private void FetchData(boolean running){
         Random r = new Random();
-        new InfoMessage(getContext(), T.AUCTIONS, new UserInfo("panagiotis", null, null, null, null)).start();
+
+        new InfoMessage(getContext(), T.AUCTIONS, new UserInfo("angelos", null, null, null, null)).start();
 
         for (int i = 0; i < 16; i++) {
             auctionTitles[i] = ( running ? "Running_Auction_" + i : "Open_Auction_"+i);
@@ -179,6 +173,14 @@ public class MyRecyclerViewFragment extends Fragment {
 
             MyAdapter adapter = new MyAdapter(getActivity(), auctionTitles, auctionObject, auctionAuctioneer, auctionPrice);
             recyclerView.setAdapter(adapter);// set adapter on recyclerview
+        }
+    }
+
+    class AuctionReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("******"+intent.getStringExtra("getAuctions"));
         }
     }
 }

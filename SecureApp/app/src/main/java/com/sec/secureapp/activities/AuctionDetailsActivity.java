@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,7 +12,7 @@ import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityAuctionDetailsBinding;
 import com.sec.secureapp.general.T;
 
-public class AuctionDetailsActivity extends BaseActivity {
+public class AuctionDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityAuctionDetailsBinding binding;
 
@@ -30,12 +31,7 @@ public class AuctionDetailsActivity extends BaseActivity {
             binding.auctionPrice.setText(getString(R.string.auction_price, bundle.getDouble("price")));
             binding.auctionParticipate.setText((bundle.getBoolean("running") ? "Bid" : "Participate"));
 
-            binding.auctionParticipate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    participate();
-                }
-            });
+            binding.auctionParticipate.setOnClickListener(this);
         }
     }
 
@@ -44,18 +40,17 @@ public class AuctionDetailsActivity extends BaseActivity {
     }
 
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_auction_details;
-    }
-
-    @Override
-    protected void clickButtons(View view) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.auction_participate:
+                participate();
+                break;
+        }
     }
 }

@@ -3,7 +3,10 @@ package com.sec.secureapp.general;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-import com.sec.secureapp.activities.*;
+
+import com.sec.secureapp.activities.LoginActivity;
+import com.sec.secureapp.activities.MainActivity;
+import com.sec.secureapp.activities.OtpActivity;
 import com.sec.secureapp.client.SSLclient;
 import com.sec.secureapp.database.DB;
 import com.sec.secureapp.security.Hashing;
@@ -183,6 +186,7 @@ public class InfoMessage extends Thread {
         for (;;){
             T.SLEEP(100);
             counter++;
+            T.AUCTIONS_MESSAGE = "TEST";
             if (T.AUCTIONS_MESSAGE != null) {
                 System.out.println(T.AUCTIONS_MESSAGE);
                 Intent i = new  Intent("com.sec.secureapp.GET_AUCTIONS");

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:background="@drawable/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -10,21 +11,26 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
+        android:weightSum="2"
         tools:context="com.sec.secureapp.activities.LoginActivity">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
+        </LinearLayout>
             <LinearLayout
                 android:id="@+id/layout_login_form"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#f1f1f1">
 
                     <AutoCompleteTextView
                         android:id="@+id/username_login"
@@ -32,13 +38,15 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_username"
                         android:inputType="textEmailAddress"
+                        android:textColor="#f1f1f1"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#f1f1f1">
 
                     <EditText
                         android:id="@+id/password_login"
@@ -46,29 +54,32 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
                         android:inputType="textPassword"
+                        android:textColor="#f1f1f1"
+                        android:textColorHighlight="#f1f1f1"
+                        android:textColorHint="#f1f1f1"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
                     android:id="@+id/signin_login_button"
-                    style="?android:textAppearanceSmall"
+                    style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/action_sign_in"
                     android:textStyle="bold" />
 
-                <Button
+                <TextView
                     android:id="@+id/register_login_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_register"
-                    android:textStyle="bold" />
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:textColor="#f1f1f1"
+                    android:text="No account yet? Create one"
+                    android:textSize="16dip" />
 
             </LinearLayout>
-        </ScrollView>
     </LinearLayout>
 </layout>

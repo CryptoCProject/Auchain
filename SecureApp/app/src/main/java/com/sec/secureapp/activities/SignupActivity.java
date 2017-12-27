@@ -1,13 +1,14 @@
 package com.sec.secureapp.activities;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sec.secureapp.R;
+import com.sec.secureapp.databinding.ActivitySignupBinding;
 import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
 import com.sec.secureapp.general.UserInfo;
@@ -15,69 +16,17 @@ import com.sec.secureapp.general.UserInfo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignupActivity extends BaseActivity {
+public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText name, password, confirmPassword, email;
-    Button signup, cancel;
+    ActivitySignupBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_signup);
 
-        name = (EditText) findViewById(R.id.username_signup);
-        password = (EditText) findViewById(R.id.password_signup);
-        confirmPassword = (EditText) findViewById(R.id.confirm_password_signup);
-        email = (EditText) findViewById(R.id.email_signup);
-
-        signup = (Button) findViewById(R.id.signup_signup_button);
-        cancel = (Button) findViewById(R.id.cancel_signup_button);
-
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String n = name.getText().toString();
-                String p = password.getText().toString();
-                String c = confirmPassword.getText().toString();
-                String e = email.getText().toString();
-                if (isEverythingRight(n, p, c, e)) {
-                    new InfoMessage(SignupActivity.this, T.SIGN_UP, new UserInfo(n, p, e, null, null)).start();
-                }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent setIntent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(setIntent);
-            }
-        });
-
-    }
-
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_signup;
-    }
-
-    protected void clickButtons(View view) {
-        switch (view.getId()) {
-            case  R.id.signup_signup_button: {
-                String n = name.getText().toString();
-                String p = password.getText().toString();
-                String c = confirmPassword.getText().toString();
-                String e = email.getText().toString();
-                if (isEverythingRight(n, p, c, e)) {
-                    new InfoMessage(this, T.SIGN_UP, new UserInfo(n, p, e, null, null)).start();
-                }
-                break;
-            }
-            case  R.id.cancel_signup_button: {
-                Intent setIntent = new Intent(this, LoginActivity.class);
-                startActivity(setIntent);
-                break;
-            }
-        }
+        binding.signupSignupButton.setOnClickListener(this);
+        binding.cancelSignupButton.setOnClickListener(this);
     }
 
     private boolean isEverythingRight(String n, String p, String cp, String e) {
@@ -109,7 +58,7 @@ public class SignupActivity extends BaseActivity {
      * 5) no whitespace allowed in the entire string
      * 6) 10 to 40 characters password
      */
-    private boolean isValidPassword(String pwd){
+    private boolean isValidPassword(String pwd) {
         Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{10,40}$");
         Matcher matcher = pattern.matcher(pwd);
         return matcher.matches();
@@ -126,7 +75,7 @@ public class SignupActivity extends BaseActivity {
      * 1) Only letters and numbers are allowable
      * 2) 3 to 15 characters
      */
-    private boolean isValidUsername(String name){
+    private boolean isValidUsername(String name) {
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();
@@ -153,4 +102,24 @@ public class SignupActivity extends BaseActivity {
         finish();
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.signup_signup_button: {
+                String n = binding.usernameSignup.getText().toString();
+                String p = binding.passwordSignup.getText().toString();
+                String c = binding.confirmPasswordSignup.getText().toString();
+                String e = binding.emailSignup.getText().toString();
+                if (isEverythingRight(n, p, c, e)) {
+                    new InfoMessage(SignupActivity.this, T.SIGN_UP, new UserInfo(n, p, e, null, null)).start();
+                }
+                break;
+            }
+            case R.id.cancel_signup_button: {
+                Intent setIntent = new Intent(this, LoginActivity.class);
+                startActivity(setIntent);
+                break;
+            }
+        }
+    }
 }

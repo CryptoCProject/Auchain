@@ -1,57 +1,53 @@
 package com.sec.secureapp.activities;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.text.InputType;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityCreateAuctionBinding;
 import com.sec.secureapp.general.T;
 
-public class CreateAuctionActivity extends BaseActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+import java.util.Calendar;
+
+public class CreateAuctionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     ActivityCreateAuctionBinding binding;
 
     //create a list of items for the spinner.
     String[] type = new String[]{"British Auction"};
-    String[] objects = new String[]{"Object1", "Object2"};
 
-    String auctioneer_id = "12345678";
-
-    private String m_Text = "";
+    private String auctionType = "";
+    private String objectName = "";
+    private String auctioneerId = "123456789";
+    private String auctionDuration = "";
+    private String initialPrice = "";
+    private String participants = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, getLayoutResourceId());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_auction);
 
         //create a list of items for the spinner.
         setSpinner(type, binding.createType);
 
-        binding.createAuctioneer.setText(auctioneer_id);
+        binding.createAuctioneer.setText(auctioneerId);
 
-        binding.createChooseObject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog();
-            }
-        });
-
-        binding.createSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        binding.createChooseObject.setOnClickListener(this);
+        binding.createSubmit.setOnClickListener(this);
+        binding.createDuration.setOnClickListener(this);
     }
 
     private void setSpinner(String[] spinner_items, Spinner spinner) {
@@ -65,16 +61,6 @@ public class CreateAuctionActivity extends BaseActivity implements AdapterView.O
     }
 
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_create_auction;
-    }
-
-    @Override
-    protected void clickButtons(View view) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         Intent mIntent = new Intent(CreateAuctionActivity.this, MainActivity.class);
         startActivity(mIntent);
@@ -82,7 +68,18 @@ public class CreateAuctionActivity extends BaseActivity implements AdapterView.O
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()){
+            case R.id.create_choose_object:
+                dialog();
+                break;
+            case R.id.create_submit:
+                initialPrice = binding.createPrice.getText().toString();
+                participants = binding.createParticipants.getText().toString();
+                System.out.println("Auction Type: "+auctionType+" Object Name: "+objectName+" Auctioneer ID: "+auctioneerId+" Duration: "+auctionDuration+" Initial Price: "+initialPrice+" Participants: "+participants);
+                break;
+            case R.id.create_duration:
+                durationPicker();
+        }
     }
 
     class TypeSpinner implements AdapterView.OnItemSelectedListener {
@@ -100,7 +97,8 @@ public class CreateAuctionActivity extends BaseActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (i) {
             case 0:
-                T.VIEW_TOAST(getApplicationContext(), "British", Toast.LENGTH_SHORT);
+                auctionType = "British";
+                T.VIEW_TOAST(getApplicationContext(), auctionType, Toast.LENGTH_SHORT);
                 break;
         }
     }
@@ -119,8 +117,7 @@ public class CreateAuctionActivity extends BaseActivity implements AdapterView.O
                 .setView(txtObject)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        String url = txtObject.getText().toString();
-                        T.VIEW_TOAST(getApplicationContext(), url, Toast.LENGTH_SHORT);
+                        objectName = txtObject.getText().toString();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -131,5 +128,21 @@ public class CreateAuctionActivity extends BaseActivity implements AdapterView.O
                 .show();
 
         return "";
+    }
+
+    private void durationPicker(){
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(CreateAuctionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                auctionDuration = selectedHour + ":" + selectedMinute;
+                T.VIEW_TOAST(getApplicationContext(), selectedHour + ":" + selectedMinute, Toast.LENGTH_SHORT);
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
     }
 }
