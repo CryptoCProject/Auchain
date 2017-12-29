@@ -49,9 +49,10 @@ public class T {
     public static String CREATE_AUCTION = " j";
     public static String CREATE_AUCTION_CONFIRM = " k";
 
-    public static String AUCTIONS = " l";
-    public static String AUCTIONS_LIST = " m";
-    public static String AUCTIONS_NULL = " n";
+    public static String OPEN_AUCTIONS = " l";
+    public static String RUNNING_AUCTIONS = " m";
+    public static String AUCTIONS_LIST = " n";
+    public static String AUCTIONS_NULL = " o";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;

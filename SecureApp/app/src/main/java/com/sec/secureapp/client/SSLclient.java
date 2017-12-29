@@ -7,23 +7,12 @@ import android.os.Message;
 
 import com.sec.secureapp.general.T;
 
-import org.json.JSONArray;
-
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.security.KeyStore;
-import java.util.Arrays;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 
 public class SSLclient extends Thread {
 
@@ -162,11 +151,13 @@ public class SSLclient extends Thread {
                             T.OTP_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.MAIN_CONFIRM)) {
                             T.MAIN_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.AUCTIONS_LIST)) {
+                        }else if (s.startsWith(T.OPEN_AUCTIONS)) {
                             T.AUCTIONS_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.AUCTIONS_NULL)) {
+                        } else if (s.startsWith(T.RUNNING_AUCTIONS)) {
+                            T.AUCTIONS_MESSAGE = s.substring(2);
+                        }else if (s.startsWith(T.AUCTIONS_LIST)) {
+                            T.AUCTIONS_MESSAGE = s.substring(2);
+                        } else if (s.startsWith(T.AUCTIONS_NULL)) {
                             T.AUCTIONS_MESSAGE = "null";
                         }
                     }

@@ -32,17 +32,17 @@ public class InfoMessage extends Thread {
         client.start();
         if (this._case.equals(T.SIGN_UP)) {
             signup((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.LOG_IN)) {
+        } else if (this._case.equals(T.LOG_IN)) {
             login((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.OTP)) {
+        } else if (this._case.equals(T.OTP)) {
             otp((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.MAIN)) {
+        } else if (this._case.equals(T.MAIN)) {
             main(null);
-        }
-        else if (this._case.equals(T.AUCTIONS)) {
+        } else if (this._case.equals(T.OPEN_AUCTIONS)) {
+            getOpenAuctions((UserInfo) messageInfo);
+        } else if (this._case.equals(T.RUNNING_AUCTIONS)) {
+            getRunningAuctions((UserInfo) messageInfo);
+        } else if (this._case.equals(T.AUCTIONS_LIST)) {
             getAuctions((UserInfo) messageInfo);
         }
         client.closeCrap();
@@ -51,17 +51,15 @@ public class InfoMessage extends Thread {
     private void signup(UserInfo ui) {
         client.sendMessage(T.SIGN_UP + T.getJson(new String[]{"u", hash.getHashedCode(ui.getName()), "p", hash.getHashedCode(ui.getPwd()), "e", ui.getEmail()}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.SIGN_UP_MESSAGE != null) {
                 if (T.SIGN_UP_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Unsuccessful registration. Something went wrong with the server. Try again please.", Toast.LENGTH_LONG);
-                }
-                else if (T.SIGN_UP_MESSAGE.equals(T.NAME_EXIST)) {
+                } else if (T.SIGN_UP_MESSAGE.equals(T.NAME_EXIST)) {
                     T.VIEW_TOAST(this.context, "Unsuccessful registration. Try an other user name.", Toast.LENGTH_LONG);
-                }
-                else {
+                } else {
                     String prkey = T.SIGN_UP_MESSAGE;
                     DB db = new DB(context);
                     db.createTables();
@@ -70,7 +68,7 @@ public class InfoMessage extends Thread {
                     T.SIGN_UP_MESSAGE = null;
                     client.sendMessage(T.PRIVATE_KEY + T.PRIVATE_KEY_ACK);
                     counter = 0;
-                    for (;;) {
+                    for (; ; ) {
                         T.SLEEP(100);
                         counter++;
                         if (T.SIGN_UP_MESSAGE != null) {
@@ -82,16 +80,14 @@ public class InfoMessage extends Thread {
                                 T.VIEW_TOAST(this.context, "Unsuccessful registration. Something went wrong with the server. Try again please.", Toast.LENGTH_LONG);
                             }
                             break;
-                        }
-                        else if (counter == 50) {
+                        } else if (counter == 50) {
                             T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                             break;
                         }
                     }
                 }
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -102,7 +98,7 @@ public class InfoMessage extends Thread {
     private void login(UserInfo ui) {
         client.sendMessage(T.LOG_IN + T.getJson(new String[]{"u", hash.getHashedCode(ui.getName()), "p", hash.getHashedCode(ui.getPwd()), "o", ui.getSalt()}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.LOG_IN_MESSAGE != null) {
@@ -110,16 +106,13 @@ public class InfoMessage extends Thread {
                     Intent intent = new Intent(this.context, OtpActivity.class);
                     intent.putExtra("name", ui.getName());
                     this.context.startActivity(intent);
-                }
-                else if (T.LOG_IN_MESSAGE.equals(T.NOT_SUCCESS)) {
+                } else if (T.LOG_IN_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Something went wrong with the server. Try again please.", Toast.LENGTH_LONG);
-                }
-                else if (T.LOG_IN_MESSAGE.equals(T.WRONG_CREDENTIALS)) {
+                } else if (T.LOG_IN_MESSAGE.equals(T.WRONG_CREDENTIALS)) {
                     T.VIEW_TOAST(this.context, "Wrong user name or password. Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            }
-            else if (counter == 80) {
+            } else if (counter == 80) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -130,29 +123,25 @@ public class InfoMessage extends Thread {
     private void otp(UserInfo ui) {
         client.sendMessage(T.OTP + T.getJson(new String[]{"u", hash.getHashedCode(ui.getName()), "o", ui.getOtp()}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.OTP_MESSAGE != null) {
                 if (T.OTP_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Something went wrong with the server. Try again please.", Toast.LENGTH_LONG);
-                }
-                else if (T.OTP_MESSAGE.equals(T.WRONG_OTP)) {
+                } else if (T.OTP_MESSAGE.equals(T.WRONG_OTP)) {
                     T.VIEW_TOAST(this.context, "Wrong OTP. Try again please.", Toast.LENGTH_LONG);
-                }
-                else if (T.OTP_MESSAGE.equals(T.OTP_ERROR)) {
+                } else if (T.OTP_MESSAGE.equals(T.OTP_ERROR)) {
                     T.VIEW_TOAST(this.context, "You tried 3 times or time elapsed. Log in again.", Toast.LENGTH_LONG);
                     Intent intent = new Intent(this.context, LoginActivity.class);
                     this.context.startActivity(intent);
-                }
-                else if (T.OTP_MESSAGE.equals(T.SUCCESS)) {
+                } else if (T.OTP_MESSAGE.equals(T.SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Successful otp", Toast.LENGTH_LONG);
                     Intent intent = new Intent(this.context, MainActivity.class);
                     this.context.startActivity(intent);
                 }
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -163,16 +152,15 @@ public class InfoMessage extends Thread {
     private void main(Object obj) {
         client.sendMessage(T.MAIN);
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.MAIN_MESSAGE != null) {
-                Intent i = new  Intent("com.sec.secureapp.MAIN_TEXTVIEW");
+                Intent i = new Intent("com.sec.secureapp.MAIN_TEXTVIEW");
                 i.putExtra("message", T.MAIN_MESSAGE);
                 context.sendBroadcast(i);
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -180,21 +168,79 @@ public class InfoMessage extends Thread {
         T.MAIN_MESSAGE = null;
     }
 
-    private void getAuctions(UserInfo ui) {
-        client.sendMessage(T.AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
+    private void getOpenAuctions(UserInfo ui) {
+        String mockupData = "{\n" +
+                "  \"n\":[{\n" +
+                "    \"a\":\"123456789\",\n" +
+                "    \"i\":\"987654\",\n" +
+                "    \"t\":\"English\",\n" +
+                "    \"n\":\"watch\",\n" +
+                "    \"p\":\"10.95\"\n" +
+                "  }]\n" +
+                "}";
+
+        client.sendMessage(T.OPEN_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
-            T.AUCTIONS_MESSAGE = "TEST";
             if (T.AUCTIONS_MESSAGE != null) {
-                System.out.println(T.AUCTIONS_MESSAGE);
-                Intent i = new  Intent("com.sec.secureapp.GET_AUCTIONS");
+                Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
+                i.putExtra("getAuctions", mockupData); //TODO: change mockupData with T.AUCTIONS_MESSAGE later
+                i.putExtra("running", false);
+                context.sendBroadcast(i);
+                break;
+            } else if (counter == 50) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+        T.AUCTIONS_MESSAGE = null;
+    }
+
+    private void getRunningAuctions(UserInfo ui) {
+        String mockupData = "{\n" +
+                "  \"n\":[{\n" +
+                "    \"a\":\"123456789\",\n" +
+                "    \"i\":\"987654\",\n" +
+                "    \"t\":\"English\",\n" +
+                "    \"n\":\"car\",\n" +
+                "    \"p\":\"1000.95\"\n" +
+                "  }]\n" +
+                "}";
+
+        client.sendMessage(T.RUNNING_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.AUCTIONS_MESSAGE != null) {
+                Intent i = new Intent("com.sec.secureapp.RUNNING_AUCTIONS");
+                i.putExtra("getAuctions", mockupData); //TODO: change mockupData with T.AUCTIONS_MESSAGE later
+                i.putExtra("running", true);
+                context.sendBroadcast(i);
+                break;
+            } else if (counter == 50) {
+                T.VIEW_TOAST(context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+        T.AUCTIONS_MESSAGE = null;
+    }
+
+    private void getAuctions(UserInfo ui) {
+        client.sendMessage(T.AUCTIONS_LIST + T.getJson(new String[]{"u", ui.getName()}).toString());
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.AUCTIONS_MESSAGE != null) {
+                System.out.println("Auction: " + T.AUCTIONS_MESSAGE);
+                Intent i = new Intent("com.sec.secureapp.GET_AUCTIONS");
                 i.putExtra("getAuctions", T.AUCTIONS_MESSAGE);
                 context.sendBroadcast(i);
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -205,5 +251,4 @@ public class InfoMessage extends Thread {
     private void createAuction() {
 
     }
-
 }
