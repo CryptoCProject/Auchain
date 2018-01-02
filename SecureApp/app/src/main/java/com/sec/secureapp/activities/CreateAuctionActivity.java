@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,20 +19,24 @@ import android.widget.Toast;
 
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityCreateAuctionBinding;
+import com.sec.secureapp.general.AuctionInfo;
+import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
 
-public class CreateAuctionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class CreateAuctionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, TextWatcher {
 
     ActivityCreateAuctionBinding binding;
 
     //create a list of items for the spinner.
-    String[] type = new String[]{"British Auction"};
+    String[] type = new String[]{"English Auction"};
 
-    private String auctionType = "";
+    // variables to store choices
+    private String auctionType = "english";
     private String objectName = "";
-    private String auctioneerId = "123456789";
+    private String auctioneerId = T.USER_ID;
     private String auctionDuration = "";
     private String initialPrice = "";
     private String participants = "";
@@ -48,6 +54,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
         binding.createChooseObject.setOnClickListener(this);
         binding.createSubmit.setOnClickListener(this);
         binding.createDuration.setOnClickListener(this);
+        binding.createPrice.addTextChangedListener(this);
     }
 
     private void setSpinner(String[] spinner_items, Spinner spinner) {
@@ -68,18 +75,60 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.create_choose_object:
                 dialog();
                 break;
             case R.id.create_submit:
-                initialPrice = binding.createPrice.getText().toString();
-                participants = binding.createParticipants.getText().toString();
-                System.out.println("Auction Type: "+auctionType+" Object Name: "+objectName+" Auctioneer ID: "+auctioneerId+" Duration: "+auctionDuration+" Initial Price: "+initialPrice+" Participants: "+participants);
+                if (everythingGood())
+                    new InfoMessage(CreateAuctionActivity.this, T.CREATE_AUCTION, new AuctionInfo(auctionType, auctioneerId, objectName, Double.parseDouble(initialPrice.substring(1)))).start();
                 break;
             case R.id.create_duration:
                 durationPicker();
         }
+    }
+
+    // check for edittext that cannot be empty
+    private boolean everythingGood() {
+        initialPrice = binding.createPrice.getText().toString();
+        participants = binding.createParticipants.getText().toString();
+        if (objectName.matches("")) {
+            T.VIEW_TOAST(getApplicationContext(), "Please Choose Object", Toast.LENGTH_SHORT);
+            return false;
+        } else if (initialPrice.matches("")) {
+            T.VIEW_TOAST(getApplicationContext(), "Please Choose Initial Price", Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    private String current = "";
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if(!charSequence.toString().equals(current)){
+       binding.createPrice.removeTextChangedListener(this);
+
+            String cleanString = charSequence.toString().replaceAll("[$,.]", "");
+
+            double parsed = Double.parseDouble(cleanString);
+            String formatted = NumberFormat.getCurrencyInstance().format((parsed/100));
+
+            current = formatted;
+            binding.createPrice.setText(formatted);
+            binding.createPrice.setSelection(formatted.length());
+
+            binding.createPrice.addTextChangedListener(this);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 
     class TypeSpinner implements AdapterView.OnItemSelectedListener {
@@ -97,7 +146,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (i) {
             case 0:
-                auctionType = "British";
+                auctionType = "english";
                 T.VIEW_TOAST(getApplicationContext(), auctionType, Toast.LENGTH_SHORT);
                 break;
         }
@@ -108,7 +157,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
 
     }
 
-    private String dialog(){
+    private String dialog() {
         final EditText txtObject = new EditText(this);
 
         new AlertDialog.Builder(this)
@@ -130,7 +179,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
         return "";
     }
 
-    private void durationPicker(){
+    private void durationPicker() {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);

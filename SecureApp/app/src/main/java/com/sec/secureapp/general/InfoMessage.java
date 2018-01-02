@@ -32,18 +32,24 @@ public class InfoMessage extends Thread {
         client.start();
         if (this._case.equals(T.SIGN_UP)) {
             signup((UserInfo) messageInfo);
-        } else if (this._case.equals(T.LOG_IN)) {
+        }
+        else if (this._case.equals(T.LOG_IN)) {
             login((UserInfo) messageInfo);
-        } else if (this._case.equals(T.OTP)) {
+        }
+        else if (this._case.equals(T.OTP)) {
             otp((UserInfo) messageInfo);
-        } else if (this._case.equals(T.MAIN)) {
+        }
+        else if (this._case.equals(T.MAIN)) {
             main(null);
-        } else if (this._case.equals(T.OPEN_AUCTIONS)) {
-            getOpenAuctions((UserInfo) messageInfo);
-        } else if (this._case.equals(T.RUNNING_AUCTIONS)) {
+        }
+        else if (this._case.equals(T.OPEN_AUCTIONS)) {
+            getOpenAuctions();
+        }
+        else if (this._case.equals(T.RUNNING_AUCTIONS)) {
             getRunningAuctions((UserInfo) messageInfo);
-        } else if (this._case.equals(T.AUCTIONS_LIST)) {
-            getAuctions((UserInfo) messageInfo);
+        }
+        else if (this._case.equals(T.CREATE_AUCTION)) {
+            createAuction((AuctionInfo) messageInfo);
         }
         client.closeCrap();
     }
@@ -61,10 +67,9 @@ public class InfoMessage extends Thread {
                     T.VIEW_TOAST(this.context, "Unsuccessful registration. Try an other user name.", Toast.LENGTH_LONG);
                 } else {
                     String prkey = T.SIGN_UP_MESSAGE;
-                    DB db = new DB(context);
-                    db.createTables();
-                    db.initializeValues();
-                    db.setMyPrivateKey(prkey.getBytes());
+                    T.USER_ID = hash.getHashedCode(ui.getName());
+                    T.DB.createTables();
+                    T.DB.initializeValues(prkey.getBytes(), T.USER_ID);
                     T.SIGN_UP_MESSAGE = null;
                     client.sendMessage(T.PRIVATE_KEY + T.PRIVATE_KEY_ACK);
                     counter = 0;
@@ -103,6 +108,7 @@ public class InfoMessage extends Thread {
             counter++;
             if (T.LOG_IN_MESSAGE != null) {
                 if (T.LOG_IN_MESSAGE.equals(T.SUCCESS)) {
+                    T.USER_ID = hash.getHashedCode(ui.getName());
                     Intent intent = new Intent(this.context, OtpActivity.class);
                     intent.putExtra("name", ui.getName());
                     this.context.startActivity(intent);
@@ -168,87 +174,84 @@ public class InfoMessage extends Thread {
         T.MAIN_MESSAGE = null;
     }
 
-    private void getOpenAuctions(UserInfo ui) {
-        String mockupData = "{\n" +
-                "  \"n\":[{\n" +
-                "    \"a\":\"123456789\",\n" +
-                "    \"i\":\"987654\",\n" +
-                "    \"t\":\"English\",\n" +
-                "    \"n\":\"watch\",\n" +
-                "    \"p\":\"10.95\"\n" +
-                "  }]\n" +
-                "}";
-
-        client.sendMessage(T.OPEN_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
+    private void getOpenAuctions() {
+        client.sendMessage(T.OPEN_AUCTIONS);
         int counter = 0;
-        for (; ; ) {
+        for (;;) {
             T.SLEEP(100);
             counter++;
-            if (T.AUCTIONS_MESSAGE != null) {
-                Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
-                i.putExtra("getAuctions", mockupData); //TODO: change mockupData with T.AUCTIONS_MESSAGE later
-                i.putExtra("running", false);
-                context.sendBroadcast(i);
+            if (T.OPEN_AUCTIONS_MESSAGE != null) {
+                if (T.OPEN_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
+                    T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
+                }
+                else {
+                    String data = T.OPEN_AUCTIONS_MESSAGE;
+                    Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
+                    i.putExtra("getAuctions", data);
+                    i.putExtra("running", false);
+                    context.sendBroadcast(i);
+                    break;
+                }
                 break;
-            } else if (counter == 50) {
+            }
+            else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
         }
-        T.AUCTIONS_MESSAGE = null;
+        T.OPEN_AUCTIONS_MESSAGE = null;
     }
 
     private void getRunningAuctions(UserInfo ui) {
-        String mockupData = "{\n" +
-                "  \"n\":[{\n" +
-                "    \"a\":\"123456789\",\n" +
-                "    \"i\":\"987654\",\n" +
-                "    \"t\":\"English\",\n" +
-                "    \"n\":\"car\",\n" +
-                "    \"p\":\"1000.95\"\n" +
-                "  }]\n" +
-                "}";
-
         client.sendMessage(T.RUNNING_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
         int counter = 0;
-        for (; ; ) {
+        for (;;) {
             T.SLEEP(100);
             counter++;
-            if (T.AUCTIONS_MESSAGE != null) {
-                Intent i = new Intent("com.sec.secureapp.RUNNING_AUCTIONS");
-                i.putExtra("getAuctions", mockupData); //TODO: change mockupData with T.AUCTIONS_MESSAGE later
-                i.putExtra("running", true);
-                context.sendBroadcast(i);
-                break;
-            } else if (counter == 50) {
-                T.VIEW_TOAST(context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+            if (T.RUNNING_AUCTIONS_MESSAGE != null) {
+                if (T.RUNNING_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
+                    T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
+                }
+                else {
+                    String data = T.RUNNING_AUCTIONS_MESSAGE;
+                    Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
+                    i.putExtra("getAuctions", data);
+                    i.putExtra("running", false);
+                    context.sendBroadcast(i);
+                    break;
+                }
                 break;
             }
-        }
-        T.AUCTIONS_MESSAGE = null;
-    }
-
-    private void getAuctions(UserInfo ui) {
-        client.sendMessage(T.AUCTIONS_LIST + T.getJson(new String[]{"u", ui.getName()}).toString());
-        int counter = 0;
-        for (; ; ) {
-            T.SLEEP(100);
-            counter++;
-            if (T.AUCTIONS_MESSAGE != null) {
-                System.out.println("Auction: " + T.AUCTIONS_MESSAGE);
-                Intent i = new Intent("com.sec.secureapp.GET_AUCTIONS");
-                i.putExtra("getAuctions", T.AUCTIONS_MESSAGE);
-                context.sendBroadcast(i);
-                break;
-            } else if (counter == 50) {
+            else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
         }
-        T.AUCTIONS_MESSAGE = null;
+        T.RUNNING_AUCTIONS_MESSAGE = null;
     }
 
-    private void createAuction() {
-
+    private void createAuction(AuctionInfo ui) {
+        client.sendMessage(T.CREATE_AUCTION + T.getJson(new String[]{"t", ui.getAuction_type(), "u", ui.getAuctioneer_id(), "o", ui.getObject_name(), "p", String.valueOf(ui.getInitial_price())}).toString());
+        int counter = 0;
+        for (;;){
+            T.SLEEP(100);
+            counter++;
+            if (T.CREATE_AUCTION_MESSAGE != null) {
+                if (T.CREATE_AUCTION_MESSAGE.equals(T.AUCTION_SUCCESS)) {
+                    T.VIEW_TOAST(this.context, "Auction created.", Toast.LENGTH_LONG);
+                    Intent intent = new Intent(this.context, MainActivity.class);
+                    this.context.startActivity(intent);
+                }
+                else if (T.CREATE_AUCTION_MESSAGE.equals(T.AUCTION_ERROR)) {
+                    T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
+                }
+                break;
+            }
+            else if (counter == 50) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+        T.CREATE_AUCTION_MESSAGE = null;
     }
 }

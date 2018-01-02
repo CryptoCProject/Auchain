@@ -134,18 +134,20 @@ public class MyRecyclerViewFragment extends Fragment {
 
     // get information from json received from server
     public void jsonToObject(String auctions) throws JSONException {
-        JSONObject object = new JSONObject(auctions);
-        JSONArray jArray = object.getJSONArray("n");
+        JSONArray jArray = new JSONArray(auctions);
         for (int i = 0; i < jArray.length(); i++) {
 
             JSONObject jObject = jArray.getJSONObject(i);
+            System.out.println("Auctions: "+jObject);
 
+
+            System.out.println("String Received: "+jObject);
             HashMap<String, String> auction = new HashMap<>();
 
             auction.put("auction_id", jObject.getString("a"));
             auction.put("auctioneer_id", jObject.getString("i"));
             auction.put("auction_type", jObject.getString("t"));
-            auction.put("object_name", jObject.getString("n"));
+            //auction.put("object_name", jObject.getString("n")); //uncomment for name
             auction.put("object_price", jObject.getString("p"));
 
             auctionList.add(auction);

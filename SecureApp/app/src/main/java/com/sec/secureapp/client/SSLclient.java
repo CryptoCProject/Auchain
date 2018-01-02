@@ -53,7 +53,7 @@ public class SSLclient extends Thread {
 
         try {
             System.out.println("You are conected");
-            connection = new Socket(InetAddress.getByName("zafeiratosv.ddns.net"), 54321);
+            connection = new Socket(InetAddress.getByName(T.SERVER_IP), T.SERVER_PORT);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,22 +143,27 @@ public class SSLclient extends Thread {
                         String s = (String) obj;
                         if (s.startsWith(T.SIGN_UP_CONFIRM)) {
                             T.SIGN_UP_MESSAGE = s.substring(2);
-                        } else if (s.startsWith(T.PRIVATE_KEY)) {
+                        }
+                        else if (s.startsWith(T.PRIVATE_KEY)) {
                             T.SIGN_UP_MESSAGE = s.substring(2);
-                        } else if (s.startsWith(T.LOG_IN_CONFIRM)) {
+                        }
+                        else if (s.startsWith(T.LOG_IN_CONFIRM)) {
                             T.LOG_IN_MESSAGE = s.substring(2);
-                        } else if (s.startsWith(T.OTP_CONFIRM)) {
+                        }
+                        else if (s.startsWith(T.OTP_CONFIRM)) {
                             T.OTP_MESSAGE = s.substring(2);
-                        } else if (s.startsWith(T.MAIN_CONFIRM)) {
+                        }
+                        else if (s.startsWith(T.MAIN_CONFIRM)) {
                             T.MAIN_MESSAGE = s.substring(2);
-                        }else if (s.startsWith(T.OPEN_AUCTIONS)) {
-                            T.AUCTIONS_MESSAGE = s.substring(2);
-                        } else if (s.startsWith(T.RUNNING_AUCTIONS)) {
-                            T.AUCTIONS_MESSAGE = s.substring(2);
-                        }else if (s.startsWith(T.AUCTIONS_LIST)) {
-                            T.AUCTIONS_MESSAGE = s.substring(2);
-                        } else if (s.startsWith(T.AUCTIONS_NULL)) {
-                            T.AUCTIONS_MESSAGE = "null";
+                        }
+                        else if (s.startsWith(T.OPEN_AUCTIONS_CONFIRM)) {
+                            T.OPEN_AUCTIONS_MESSAGE = s.substring(2);
+                        }
+                        else if (s.startsWith(T.RUNNING_AUCTIONS_CONFIRM)) {
+                            T.RUNNING_AUCTIONS_MESSAGE = s.substring(2);
+                        }
+                        else if (s.startsWith(T.CREATE_AUCTION_CONFIRM)) {
+                            T.CREATE_AUCTION_MESSAGE = s.substring(2);
                         }
                     }
 

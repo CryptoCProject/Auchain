@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.sec.secureapp.R;
+import com.sec.secureapp.database.DB;
 import com.sec.secureapp.databinding.ActivityLoginBinding;
 import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
@@ -23,6 +24,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         binding.registerLoginButton.setOnClickListener(this);
         binding.signinLoginButton.setOnClickListener(this);
+
+        T.DB = new DB(this);
+
     }
 
     @Override

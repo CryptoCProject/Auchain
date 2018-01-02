@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // progress dialog showing until data is fetched
     ProgressDialog progressDialog;
 
+    int received = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         // send message to server for open and running auctions
-        new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo("angelos", null, null, null, null)).start();
-        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo("angelos", null, null, null, null)).start();
+        new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
+        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo("allosangelos", null, null, null, null)).start();
 
         // show dialog
         progressDialog = new ProgressDialog(this);
@@ -219,11 +221,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (running) {
                 runningAuctions = intent.getStringExtra("getAuctions");
-
-                setupViewPager(binding.viewPager);
-                binding.tabLayout.setupWithViewPager(binding.viewPager);//setting tab over viewpager
+                received++;
             } else {
                 openAuctions = intent.getStringExtra("getAuctions");
+                received++;
+            }
+
+            if (received == 2) {
+                setupViewPager(binding.viewPager);
+                binding.tabLayout.setupWithViewPager(binding.viewPager);//setting tab over viewpager
             }
 
             if (progressDialog.isShowing()) {

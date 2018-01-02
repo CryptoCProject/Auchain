@@ -34,29 +34,40 @@ public class DB extends SQLiteOpenHelper {
 
     public void createTables() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String CREATE_TABLE_KEYS = "CREATE TABLE IF NOT EXISTS Keys (myPrivateKey TEXT)";
+        String CREATE_TABLE_KEYS = "CREATE TABLE IF NOT EXISTS Keys (privateKey TEXT, name TEXT)";
         db.execSQL(CREATE_TABLE_KEYS);
         db.close();
     }
 
-    public void initializeValues() {
+    public void initializeValues(byte [] pk, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "INSERT INTO Keys (myPrivateKey) VALUES(?)";
-        SQLiteStatement insertStmt = db.compileStatement(sql);
-        insertStmt.clearBindings();
-        byte[] b = new byte[1024];
-        insertStmt.bindBlob(1, b);
-        insertStmt.executeInsert();
+        ContentValues values = new ContentValues();
+        values.put("privateKey", pk);
+        values.put("name", name);
+        db.insert("Keys", null, values);
         db.close();
-        insertStmt.close();
     }
 
-    public void setMyPrivateKey(byte [] pkFile) {
+
+//    public void initializeValues() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String sql = "INSERT or REPLACE INTO Info (myPrivateKey, name) VALUES(?, ?)";
+//        SQLiteStatement insertStmt = db.compileStatement(sql);
+//        insertStmt.clearBindings();
+//        byte[] b = new byte[1024];
+//        insertStmt.bindBlob(1, b);
+//        insertStmt.bindString(2, "");
+//        insertStmt.executeInsert();
+//        db.close();
+//        insertStmt.close();
+//    }
+
+    public void setPrivateKey(byte [] pkFile, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
-            values.put("myPrivateKey", pkFile);
-            db.update("Keys", values, null, null );
+            values.put("privateKey", pkFile);
+            db.update("Keys", values, "name = "+name, null );
             db.close();
         } catch (Exception e) {
             db.close();
@@ -64,9 +75,9 @@ public class DB extends SQLiteOpenHelper {
         }
     }
 
-    public PrivateKey getMyPrivateKey() {
+    public PrivateKey getPrivateKey(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "SELECT myPrivateKey FROM Keys";
+        String sql = "SELECT privateKey FROM Keys WHERE name="+name;
         Cursor cursor = db.rawQuery(sql, new String[] {});
 
         byte[] pk = null;

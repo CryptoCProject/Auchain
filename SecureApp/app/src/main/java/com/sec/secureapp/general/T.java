@@ -17,8 +17,9 @@ import java.util.HashMap;
 public class T {
 
     public static DB DB;
+    public static String USER_ID;
 
-    public static String SERVER_IP = "192.168.1.2";
+    public static String SERVER_IP = "zafeiratosv.ddns.net";
     public static int SERVER_PORT = 54321;
     public static String CERT_NAME = "sslsec.bks";
 
@@ -50,15 +51,18 @@ public class T {
     public static String CREATE_AUCTION_CONFIRM = " k";
 
     public static String OPEN_AUCTIONS = " l";
-    public static String RUNNING_AUCTIONS = " m";
-    public static String AUCTIONS_LIST = " n";
-    public static String AUCTIONS_NULL = " o";
+    public static String OPEN_AUCTIONS_CONFIRM = " m";
+
+    public static String RUNNING_AUCTIONS = " n";
+    public static String RUNNING_AUCTIONS_CONFIRM = " o";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;
     public static String OTP_MESSAGE = null;
     public static String MAIN_MESSAGE = null;
-    public static String AUCTIONS_MESSAGE = null;
+    public static String CREATE_AUCTION_MESSAGE = null;
+    public static String OPEN_AUCTIONS_MESSAGE = null;
+    public static String RUNNING_AUCTIONS_MESSAGE = null;
 
     public static void VIEW_TOAST(final Context con, final String toast, final int dur) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
