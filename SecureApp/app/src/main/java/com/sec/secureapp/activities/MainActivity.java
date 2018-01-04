@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //TODO: Create new java file
     //View Pager fragments setting adapter class
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
         String[] tabTitles;
@@ -211,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    //TODO: Put it on a new java file
     class AuctionReceiver extends BroadcastReceiver {
 
         @Override
