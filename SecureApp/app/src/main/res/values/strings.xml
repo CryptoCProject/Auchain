@@ -36,7 +36,10 @@
     <string name="menu_logout">Logout</string>
 
     <!-- Auction Details-->
+    <string name="auction_object">Object: %s</string>
+    <string name="auction_auctioneer">Auctioneer ID: %s</string>
     <string name="auction_price">Price: $%.2f</string>
+    <string name="auction_participate">Participate</string>
 
     <!-- Create Auctions -->
     <string name="create_auction_type">Choose Auction Type: </string>
@@ -48,5 +51,9 @@
     <string name="create_auction_participants">Minimum Participants: </string>
     <string name="create_auction_duration">Duration: </string>
     <string name="create_auction_submit">Submit</string>
+
+    <!-- Profile Page -->
+    <string name="profile_show_auctions">Show Auctions</string>
+
 
 </resources>

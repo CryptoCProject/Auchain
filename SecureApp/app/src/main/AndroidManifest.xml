@@ -18,7 +18,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".activities.SignupActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.AuctionDetailsActivity" />
+        <activity android:name=".activities.AuctionDetailsActivity" android:theme="@style/AppTheme"/>
         <activity
             android:name=".activities.OtpActivity"
             android:theme="@style/PopupTheme" />
@@ -29,8 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ProfileActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.CreateAuctionActivity" />
+        <activity android:name=".activities.ProfileActivity" android:theme="@style/AppTheme"/>
+        <activity android:name=".activities.CreateAuctionActivity" android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

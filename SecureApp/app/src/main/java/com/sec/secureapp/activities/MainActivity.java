@@ -81,9 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(runningAuctionReceiver, filter);
 
         // change actionbar title
-        setSupportActionBar(binding.toolbar);
         binding.toolbar.setTitle("Auctions");
-
+        setSupportActionBar(binding.toolbar);
         // TODO: Fetch data on tab change
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -113,6 +112,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         binding.fab.setOnClickListener(this);
+
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        binding.fab.hide(); // Hide animation
+                        break;
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        switch (binding.viewPager.getCurrentItem()) {
+                            case 0:
+                                //fragment2.shareFab(null); // Remove FAB from fragment
+                                //fragment1.shareFab(mSharedFab); // Share FAB to new displayed fragment
+                                break;
+                            case 1:
+                            default:
+                                //fragment1.shareFab(null); // Remove FAB from fragment
+                                //fragment2.shareFab(mSharedFab); // Share FAB to new displayed fragment
+                                break;
+                        }
+                        binding.fab.show(); // Show animation
+                        break;
+                }
+            }
+        });
     }
 
     //Setting View Pager
