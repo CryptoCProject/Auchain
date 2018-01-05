@@ -18,8 +18,9 @@ public class T {
 
     public static DB DB;
     public static String USER_ID;
+    public static AuctionConnection AC;
 
-    public static String SERVER_IP = "zafeiratosv.ddns.net";
+    public static String SERVER_IP = "192.168.1.2";
     public static int SERVER_PORT = 54321;
     public static String CERT_NAME = "sslsec.bks";
 
@@ -32,6 +33,9 @@ public class T {
     public static String PRIVATE_KEY_ACK = "7";
     public static String AUCTION_SUCCESS= "8";
     public static String AUCTION_ERROR= "9";
+    public static String AUCTION_WAITING = "10";
+    public static String AUCTION_RUNNING = "11";
+    public static String AUCTION_FINISHED = "12";
 
     public static String SIGN_UP = " a";
     public static String SIGN_UP_CONFIRM = " b";
@@ -56,6 +60,12 @@ public class T {
     public static String RUNNING_AUCTIONS = " n";
     public static String RUNNING_AUCTIONS_CONFIRM = " o";
 
+    public static String PARTICIPATE = " p";
+    public static String PARTICIPATE_CONFIRM = " q";
+
+    public static String CONNECT_AUCTION = " r";
+    public static String CONNECT_AUCTION_CONFIRM = " s";
+
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;
     public static String OTP_MESSAGE = null;
@@ -63,6 +73,8 @@ public class T {
     public static String CREATE_AUCTION_MESSAGE = null;
     public static String OPEN_AUCTIONS_MESSAGE = null;
     public static String RUNNING_AUCTIONS_MESSAGE = null;
+    public static String PARTICIPATE_MESSAGE = null;
+    public static String CONNECT_AUCTION_MESSAGE = null;
 
     public static void VIEW_TOAST(final Context con, final String toast, final int dur) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {

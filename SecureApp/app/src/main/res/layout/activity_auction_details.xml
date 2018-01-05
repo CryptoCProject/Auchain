@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:background="@color/colorWindowBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -27,9 +26,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/auction_object"
+                android:text="Object: %s"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:textSize="21sp"/>
         </LinearLayout>
 
@@ -49,8 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
-                android:text="@string/auction_auctioneer"/>
+                android:text="Auctioneer ID: %s"/>
         </LinearLayout>
 
         <LinearLayout
@@ -70,18 +67,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
-                android:text="@string/auction_price"/>
+                android:text="Price: $%d"/>
         </LinearLayout>
 
         <Button
-            style="@style/Widget.AppCompat.Button.Colored"
             android:id="@+id/auction_participate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="@string/auction_participate"/>
+            android:text="Participate"/>
 
     </LinearLayout>
 

@@ -46,8 +46,6 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_auction);
 
-        getSupportActionBar().setTitle("Create Auction");
-
         //create a list of items for the spinner.
         setSpinner(type, binding.createType);
 
