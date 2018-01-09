@@ -10,16 +10,11 @@ import android.widget.Toast;
 
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityAuctionDetailsBinding;
-import com.sec.secureapp.general.InfoMessage;
-import com.sec.secureapp.general.ParticipationInfo;
 import com.sec.secureapp.general.T;
-import com.sec.secureapp.general.UserInfo;
 
 public class AuctionDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityAuctionDetailsBinding binding;
-
-    private int auction_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +24,6 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             ActionBar actionBar = getSupportActionBar();
-            auction_id = Integer.parseInt(bundle.getString("title"));
             getSupportActionBar().setTitle(bundle.getString("title"));
 
             binding.auctionObject.setText(bundle.getString("object"));
@@ -43,7 +37,6 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     private void participate() {
         T.VIEW_TOAST(getApplicationContext(), "Participate Confirmed", Toast.LENGTH_SHORT);
-        new InfoMessage(this, T.PARTICIPATE, new ParticipationInfo(T.USER_ID, auction_id)).start();
     }
 
     @Override
