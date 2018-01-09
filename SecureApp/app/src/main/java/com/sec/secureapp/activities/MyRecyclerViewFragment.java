@@ -1,7 +1,10 @@
 package com.sec.secureapp.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -96,19 +99,54 @@ public class MyRecyclerViewFragment extends Fragment {
         recyclerView.setAdapter(adapter);// set adapter on recyclerview
     }
 
+    // AsyncTask
+    class MyAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private ProgressDialog progressDialog;
+        Boolean running;
+
+        public MyAsyncTask(Activity activity, boolean running) {
+            progressDialog = new ProgressDialog(activity);
+            this.running = running;
+        }
+
+        protected void onPreExecute() {
+            this.progressDialog.setMessage("Downloading your data...");
+            this.progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            return null;
+        }
+
+        protected void onPostExecute(Void v) {
+
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+
+            MyAdapter adapter = new MyAdapter(getActivity(), auctionList);
+            recyclerView.setAdapter(adapter);// set adapter on recyclerview
+        }
+    }
+
     // get information from json received from server
     public void jsonToObject(String auctions) throws JSONException {
         JSONArray jArray = new JSONArray(auctions);
         for (int i = 0; i < jArray.length(); i++) {
 
             JSONObject jObject = jArray.getJSONObject(i);
+            System.out.println("Auctions: "+jObject);
 
+            System.out.println("String Received: "+jObject);
             HashMap<String, String> auction = new HashMap<>();
 
             auction.put("auction_id", jObject.getString("a"));
             auction.put("auctioneer_id", jObject.getString("i"));
             auction.put("auction_type", jObject.getString("t"));
-            //auction.put("object_name", jObject.getString("n")); //uncomment for name
+            auction.put("object_name", jObject.getString("n"));
             auction.put("object_price", jObject.getString("p"));
 
             auctionList.add(auction);

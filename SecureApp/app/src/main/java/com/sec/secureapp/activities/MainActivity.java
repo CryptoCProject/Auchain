@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // send message to server for open and running auctions
         new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
-        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo("allosangelos", null, null, null, null)).start();
+        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo(T.USER_ID, null, null, null, null)).start();
 
         // show dialog
         progressDialog = new ProgressDialog(this);
@@ -81,8 +81,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(runningAuctionReceiver, filter);
 
         // change actionbar title
-        binding.toolbar.setTitle("Auctions");
         setSupportActionBar(binding.toolbar);
+        binding.toolbar.setTitle("Auctions");
+
         // TODO: Fetch data on tab change
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -112,48 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         binding.fab.setOnClickListener(this);
-
-        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                switch (position) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                switch (state) {
-                    case ViewPager.SCROLL_STATE_DRAGGING:
-                        binding.fab.hide(); // Hide animation
-                        break;
-                    case ViewPager.SCROLL_STATE_IDLE:
-                        switch (binding.viewPager.getCurrentItem()) {
-                            case 0:
-                                //fragment2.shareFab(null); // Remove FAB from fragment
-                                //fragment1.shareFab(mSharedFab); // Share FAB to new displayed fragment
-                                break;
-                            case 1:
-                            default:
-                                //fragment1.shareFab(null); // Remove FAB from fragment
-                                //fragment2.shareFab(mSharedFab); // Share FAB to new displayed fragment
-                                break;
-                        }
-                        binding.fab.show(); // Show animation
-                        break;
-                }
-            }
-        });
     }
 
     //Setting View Pager
@@ -172,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //TODO: Create new java file
     //View Pager fragments setting adapter class
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
         String[] tabTitles;
@@ -251,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    //TODO: Put it on a new java file
     class AuctionReceiver extends BroadcastReceiver {
 
         @Override

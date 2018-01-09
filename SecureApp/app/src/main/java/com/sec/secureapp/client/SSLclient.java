@@ -165,6 +165,12 @@ public class SSLclient extends Thread {
                         else if (s.startsWith(T.CREATE_AUCTION_CONFIRM)) {
                             T.CREATE_AUCTION_MESSAGE = s.substring(2);
                         }
+                        else if (s.startsWith(T.PARTICIPATE_CONFIRM)) {
+                            T.PARTICIPATE_MESSAGE = s.substring(2);
+                        }
+                        else if (s.startsWith(T.CONNECT_AUCTION_CONFIRM)) {
+                            T.CONNECT_AUCTION_MESSAGE = s.substring(2);
+                        }
                     }
 
                 }

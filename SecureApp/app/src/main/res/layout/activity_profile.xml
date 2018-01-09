@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:background="@color/colorWindowBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -27,7 +26,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Account Name"
-                android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:textSize="21sp"/>
         </LinearLayout>
@@ -48,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
                 android:text="Account ID"/>
         </LinearLayout>
 
@@ -69,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
                 android:text="Account Balance"/>
         </LinearLayout>
 
@@ -91,17 +87,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
                 android:text="Account Mail"/>
         </LinearLayout>
 
         <Button
-            style="@style/Widget.AppCompat.Button.Colored"
             android:id="@+id/profile_show_auctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/profile_show_auctions"/>
+            android:onClick="clickButtons"
+            android:text="Show Auctions"/>
 
     </LinearLayout>
 </layout>

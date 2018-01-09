@@ -20,8 +20,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
 
-        getSupportActionBar().setTitle("My Profile");
-
         binding.profileShowAuctions.setOnClickListener(this);
     }
 
