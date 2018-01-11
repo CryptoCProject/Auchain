@@ -37,20 +37,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.register_login_button:
                 Intent intent = new Intent(this, SignupActivity.class);
                 this.startActivity(intent);
                 finish();
                 break;
 
-            case  R.id.signin_login_button:
+            case R.id.signin_login_button:
                 String n = binding.usernameLogin.getText().toString();
                 String p = binding.passwordLogin.getText().toString();
                 String otpId = String.valueOf(System.currentTimeMillis());
                 new InfoMessage(this, T.LOG_IN, new UserInfo(n, p, null, otpId, null)).start();
                 break;
-
+            default:
+                break;
         }
     }
 }

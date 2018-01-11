@@ -7,16 +7,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityMainBinding;
@@ -52,64 +51,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int received = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        // send message to server for open and running auctions
-        new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
-        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo("allosangelos", null, null, null, null)).start();
+        sendMessages();
+        createDialog();
+        createReceivers();
 
-        // show dialog
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Downloading your data...");
-        progressDialog.show();
-
-        // filter used for receiver
-        IntentFilter filter = new IntentFilter();
-
-        // create a receiver for running auctions and wait response from server
-        openAuctionReceiver = new AuctionReceiver();
-        filter.addAction("com.sec.secureapp.OPEN_AUCTIONS");
-        registerReceiver(openAuctionReceiver, filter);
-
-        // create a receiver for running auctions and wait response from server
-        runningAuctionReceiver = new AuctionReceiver();
-        filter.addAction("com.sec.secureapp.RUNNING_AUCTIONS");
-        registerReceiver(runningAuctionReceiver, filter);
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
 
         // change actionbar title
         binding.toolbar.setTitle("Auctions");
         setSupportActionBar(binding.toolbar);
-        // TODO: Fetch data on tab change
-        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                // filter used for receiver
-                switch (tab.getPosition()){
-                    case 0:
-                        T.VIEW_TOAST(getApplicationContext(), "OPEN", Toast.LENGTH_SHORT);
-                        //new InfoMessage(getApplicationContext(), T.OPEN_AUCTIONS, new UserInfo("angelos", null, null, null, null)).start();
-                        break;
-                    case 1:
-                        T.VIEW_TOAST(getApplicationContext(), "RUNNING", Toast.LENGTH_SHORT);
-                        //new InfoMessage(getApplicationContext(), T.RUNNING_AUCTIONS, new UserInfo("angelos", null, null, null, null)).start();
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
         binding.fab.setOnClickListener(this);
 
@@ -121,14 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onPageSelected(int position) {
 
-                switch (position) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    default:
-                        break;
-                }
             }
 
             @Override
@@ -137,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case ViewPager.SCROLL_STATE_DRAGGING:
                         binding.fab.hide(); // Hide animation
                         break;
-                    case ViewPager.SCROLL_STATE_IDLE:
+                    /*case ViewPager.SCROLL_STATE_IDLE:
                         switch (binding.viewPager.getCurrentItem()) {
                             case 0:
                                 //fragment2.shareFab(null); // Remove FAB from fragment
@@ -150,10 +102,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 break;
                         }
                         binding.fab.show(); // Show animation
+                        break;*/
+                    default:
                         break;
                 }
             }
         });
+    }
+
+    // refresh viewpager
+    public void refresh() {
+        received = 0;
+        sendMessages();
+        createReceivers();
+    }
+
+    private void createReceivers() {
+        // filter used for receiver
+        IntentFilter filter = new IntentFilter();
+
+        // create a receiver for running auctions and wait response from server
+        openAuctionReceiver = new AuctionReceiver();
+        filter.addAction("com.sec.secureapp.OPEN_AUCTIONS");
+        registerReceiver(openAuctionReceiver, filter);
+
+        // create a receiver for running auctions and wait response from server
+        runningAuctionReceiver = new AuctionReceiver();
+        filter.addAction("com.sec.secureapp.RUNNING_AUCTIONS");
+        registerReceiver(runningAuctionReceiver, filter);
+    }
+
+    private void createDialog() {
+        // show dialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Downloading your data...");
+        progressDialog.show();
+    }
+
+    private void sendMessages() {
+        // send message to server for open and running auctions
+        new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
+        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo("allosangelos", null, null, null, null)).start();
     }
 
     //Setting View Pager
@@ -168,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fab:
                 Intent mIntent = new Intent(MainActivity.this, CreateAuctionActivity.class);
                 startActivity(mIntent);
+                break;
+            default:
                 break;
         }
     }
@@ -186,13 +177,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {// if the position is 0 we are returning the First tab
+            switch (position) {// if the position is 0 we are returning the First tab
                 case 0:
-                    MyRecyclerViewFragment tab1 = new MyRecyclerViewFragment(false, openAuctions);
-                    return tab1;
+                    MyRecyclerViewFragment openFragment = new MyRecyclerViewFragment(false, openAuctions);
+                    return openFragment;
                 case 1:
-                    MyRecyclerViewFragment tab2 = new MyRecyclerViewFragment(true, runningAuctions);
-                    return tab2;
+                    MyRecyclerViewFragment runningFragment = new MyRecyclerViewFragment(true, runningAuctions);
+                    return runningFragment;
                 default:
                     return null;
             }
@@ -233,6 +224,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent = new Intent(this, LoginActivity.class);
                 this.startActivity(intent);
                 break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -245,16 +238,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onPause() {
-        unregisterReceiver(runningAuctionReceiver);
-        unregisterReceiver(openAuctionReceiver);
         super.onPause();
         finish();
+    }
+
+    private void unregisterReceivers() {
+        unregisterReceiver(runningAuctionReceiver);
+        unregisterReceiver(openAuctionReceiver);
     }
 
     class AuctionReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+
 
             boolean running = intent.getBooleanExtra("running", false);
 
@@ -266,13 +263,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 received++;
             }
 
+
             if (received == 2) {
+
+                unregisterReceivers();
+
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                if (binding.swipeRefreshLayout.isRefreshing()) {
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                }
+
                 setupViewPager(binding.viewPager);
                 binding.tabLayout.setupWithViewPager(binding.viewPager);//setting tab over viewpager
-            }
-
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
             }
         }
     }

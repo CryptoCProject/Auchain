@@ -3,7 +3,6 @@ package com.sec.secureapp.activities;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -13,7 +12,6 @@ import com.sec.secureapp.databinding.ActivityAuctionDetailsBinding;
 import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.ParticipationInfo;
 import com.sec.secureapp.general.T;
-import com.sec.secureapp.general.UserInfo;
 
 public class AuctionDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,7 +26,6 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            ActionBar actionBar = getSupportActionBar();
             auction_id = Integer.parseInt(bundle.getString("title"));
             getSupportActionBar().setTitle(bundle.getString("title"));
 
@@ -54,9 +51,11 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.auction_participate:
                 participate();
+                break;
+            default:
                 break;
         }
     }

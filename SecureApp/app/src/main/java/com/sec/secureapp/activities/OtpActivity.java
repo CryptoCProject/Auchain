@@ -40,17 +40,18 @@ public class OtpActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.continue_otp_button: {
+            case R.id.continue_otp_button:
                 String otp = binding.otp.getText().toString();
-                new InfoMessage(this, T.OTP,new UserInfo(name, null, null, null, otp)).start();
+                new InfoMessage(this, T.OTP, new UserInfo(name, null, null, null, otp)).start();
                 break;
-            }
-            case  R.id.cancel_otp_button: {
+
+            case R.id.cancel_otp_button:
                 Intent setIntent = new Intent(this, LoginActivity.class);
                 startActivity(setIntent);
                 finish();
                 break;
-            }
+            default:
+                break;
         }
     }
 }
