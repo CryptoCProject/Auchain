@@ -62,7 +62,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
     private void setSpinner(String[] spinner_items, Spinner spinner) {
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinner_items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_list_style, spinner_items);
         //set the spinners adapter to the previously created one.
         spinner.setAdapter(adapter);
         if (spinner == binding.createType)
