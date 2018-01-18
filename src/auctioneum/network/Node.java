@@ -46,6 +46,7 @@ public class Node implements Serializable{
     private FileManager fileManager;
 
 
+    public Node(){}
 
     public Node(Account account){
         this.ip = Settings.IP;
@@ -53,7 +54,7 @@ public class Node implements Serializable{
         this.transactionsPort = Settings.TRANSACTIONS_PORT;
         this.account = account;
         this.fileManager = new FileManager();
-        this.peers = new ArrayList<>();
+        this.peers = Settings.PEERS;
         this.validationServer = new Server<ValidationService>(this,this.validationsPort,"VdsServer",ValidationService.class);
         this.transactionServer = new Server<TransactionService>(this, this.transactionsPort,"TxsServer",TransactionService.class);
         this.blockChain = this.updateCopy();
@@ -62,19 +63,9 @@ public class Node implements Serializable{
 
     /**----------------------------------- Network ----------------------------------**/
 
-    public void connect(){
-        //Channel<Node>
-    }
+    public void connect(){}
 
     public void updatePeers(){}
-
-    /**
-     * Leave auctioneum network
-     */
-    public void leave(){
-        this.transactionServer.stop();
-        this.validationServer.stop();
-    }
 
     /**-------------------------------- Transactions --------------------------------**/
 
@@ -139,6 +130,15 @@ public class Node implements Serializable{
     /**--------------------------------- Blockchain ---------------------------------**/
 
     public BlockChain updateCopy(){return null;}
+
+
+    /**
+     * Leave auctioneum network
+     */
+    public void leave(){
+        this.transactionServer.stop();
+        this.validationServer.stop();
+    }
 
 
     /**----------------------------- Accessors-Mutators -----------------------------**/

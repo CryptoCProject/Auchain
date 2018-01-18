@@ -1,8 +1,9 @@
 package auctioneum.blockchain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Account {
+public class Account implements Serializable{
 
     /** Signifies the number of transactions made by this account **/
     private int nonce;
