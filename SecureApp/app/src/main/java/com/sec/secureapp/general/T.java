@@ -12,6 +12,7 @@ import com.sec.secureapp.security.Keys;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class T {
@@ -65,6 +66,9 @@ public class T {
 
     public static String CONNECT_AUCTION = " r";
     public static String CONNECT_AUCTION_CONFIRM = " s";
+
+    public static String BID = "";
+    public static String BID_CONFIRM = "";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;

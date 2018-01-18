@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.widget.Toast;
 
 import com.sec.secureapp.general.T;
 
@@ -169,7 +170,7 @@ public class SSLclient extends Thread {
                             T.PARTICIPATE_MESSAGE = s.substring(2);
                         }
                         else if (s.startsWith(T.CONNECT_AUCTION_CONFIRM)) {
-                            T.CONNECT_AUCTION_MESSAGE = s.substring(2);
+                            T.VIEW_TOAST(context, "Auction with id: "+s+" has started!", Toast.LENGTH_LONG);
                         }
                     }
 

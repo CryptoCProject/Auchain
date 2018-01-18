@@ -1,5 +1,7 @@
 package com.sec.secureapp.general;
 
+import java.util.ArrayList;
+
 public class UserInfo {
 
     private String name;

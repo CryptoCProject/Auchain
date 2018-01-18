@@ -1,12 +1,15 @@
 package com.sec.secureapp.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_DRAGGING:
-                        binding.fab.hide(); // Hide animation
+                        //binding.fab.hide(); // Hide animation
                         break;
                     /*case ViewPager.SCROLL_STATE_IDLE:
                         switch (binding.viewPager.getCurrentItem()) {
@@ -108,10 +111,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+
+        waitRefresh();
     }
 
     // refresh viewpager
     public void refresh() {
+        waitRefresh();
         received = 0;
         sendMessages();
         createReceivers();
@@ -136,13 +142,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // show dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Downloading your data...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
     private void sendMessages() {
         // send message to server for open and running auctions
         new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
-        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo("0e51ff6f83c353940d097fdb584a74f8a0f9245f156607f998a70dc618fa8ff9", null, null, null, null)).start();
+        new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo(T.USER_ID, null, null, null, null)).start();
     }
 
     //Setting View Pager
@@ -280,5 +287,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 binding.tabLayout.setupWithViewPager(binding.viewPager);//setting tab over viewpager
             }
         }
+    }
+
+    public void waitRefresh() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("Something went wrong :(.. Please refresh.")
+                            .setCancelable(false)
+                            .setPositiveButton("Refresh", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    createDialog();
+                                    refresh();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
+            }
+        }, 5000);
     }
 }

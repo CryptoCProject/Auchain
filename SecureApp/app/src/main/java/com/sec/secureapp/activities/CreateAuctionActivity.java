@@ -22,6 +22,7 @@ import com.sec.secureapp.databinding.ActivityCreateAuctionBinding;
 import com.sec.secureapp.general.AuctionInfo;
 import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
+import com.sec.secureapp.security.Hashing;
 
 import java.text.NumberFormat;
 import java.util.Calendar;

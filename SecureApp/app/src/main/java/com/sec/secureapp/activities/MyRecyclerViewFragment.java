@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.sec.secureapp.R;
+import com.sec.secureapp.general.ParticipatedAuctions;
+import com.sec.secureapp.general.ParticipationInfo;
 import com.sec.secureapp.general.T;
 
 import org.json.JSONArray;
@@ -73,6 +75,7 @@ public class MyRecyclerViewFragment extends Fragment {
                 mIntent.putExtra("object", auctionList.get(position).get("object_name"));
                 mIntent.putExtra("auctioneer", auctionList.get(position).get("auctioneer_id"));
                 mIntent.putExtra("price", auctionList.get(position).get("object_price"));
+                mIntent.putExtra("participated", auctionList.get(position).get("participated"));
                 mIntent.putExtra("running", running);
                 T.VIEW_TOAST(getContext(), "" + running, Toast.LENGTH_SHORT);
 
@@ -107,8 +110,13 @@ public class MyRecyclerViewFragment extends Fragment {
             auction.put("auction_id", jObject.getString("a"));
             auction.put("auctioneer_id", jObject.getString("i"));
             auction.put("auction_type", jObject.getString("t"));
-            //auction.put("object_name", jObject.getString("n")); //uncomment for name
+            auction.put("object_name", jObject.getString("n"));
             auction.put("object_price", jObject.getString("p"));
+
+            if (ParticipatedAuctions.auctionsParticipated.contains(Integer.parseInt(jObject.getString("a")))) {
+                auction.put("participated", "1");
+            }
+            else auction.put("participated", "0");
 
             auctionList.add(auction);
         }

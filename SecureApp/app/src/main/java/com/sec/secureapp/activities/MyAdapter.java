@@ -1,6 +1,7 @@
 package com.sec.secureapp.activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,11 +36,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final MyViewHolder mainHolder = (MyViewHolder) holder;
         //Setting text over textview
-        mainHolder._auctionTitle.setText(auctionList.get(position).get("auction_id"));
+        mainHolder._auctionTitle.setText("Auction id: "+auctionList.get(position).get("auction_id"));
         mainHolder._auctionObject.setText(auctionList.get(position).get("object_name"));
         mainHolder._auctionAuctioneer.setText(auctionList.get(position).get("auctioneer_id"));
         mainHolder._auctionPrice.setText(this.mContext.getString(R.string.auction_price, Double.parseDouble(auctionList.get(position).get("object_price"))));
 
+        if (auctionList.get(position).get("participated").equals("1"))
+            mainHolder._cardView.setCardBackgroundColor(Color.GREEN);
     }
     @Override
     public int getItemCount() {

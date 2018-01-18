@@ -29,13 +29,18 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             auction_id = Integer.parseInt(bundle.getString("title"));
-            getSupportActionBar().setTitle(bundle.getString("title"));
+            getSupportActionBar().setTitle("Auction id: " + bundle.getString("title"));
 
             binding.auctionObject.setText(bundle.getString("object"));
             binding.auctionAuctioneer.setText(bundle.getString("auctioneer"));
-            binding.auctionPrice.setText(getString(R.string.auction_price, bundle.getDouble("price")));
+            binding.auctionPrice.setText(getString(R.string.auction_price, Double.parseDouble(bundle.getString("price"))));
             running = bundle.getBoolean("running");
             binding.auctionAction.setText((running ? "Bid" : "Participate"));
+
+            if (!running && bundle.getString("participated").equals("1")) {
+                binding.auctionAction.setText("Already Participated");
+                binding.auctionAction.setEnabled(false);
+            }
 
             binding.auctionAction.setOnClickListener(this);
         }
@@ -48,8 +53,10 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     // button action when in an open auction
     private void participate() {
-        T.VIEW_TOAST(getApplicationContext(), "Participate Confirmed", Toast.LENGTH_SHORT);
         new InfoMessage(this, T.PARTICIPATE, new ParticipationInfo(T.USER_ID, auction_id)).start();
+        binding.auctionAction.setText("Already Participated");
+        binding.auctionAction.setEnabled(false);
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.sec.secureapp.general;
 
+import java.util.ArrayList;
+
 public class ParticipationInfo {
 
     private String participant_id;
@@ -9,6 +11,8 @@ public class ParticipationInfo {
         this.participant_id = participant_id;
         this.auction_id = auction_id;
     }
+
+    public ParticipationInfo(){}
 
     public String getParticipant_id() {
         return participant_id;
@@ -25,5 +29,4 @@ public class ParticipationInfo {
     public void setAuction_id(int auction_id) {
         this.auction_id = auction_id;
     }
-
 }

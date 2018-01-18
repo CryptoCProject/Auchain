@@ -54,6 +54,9 @@ public class InfoMessage extends Thread {
         else if (this._case.equals(T.PARTICIPATE)) {
             participate((ParticipationInfo) messageInfo);
         }
+        else if (this._case.equals(T.BID)) {
+            //bid((BidInfo) messageInfo);
+        }
         client.closeCrap();
     }
 
@@ -240,12 +243,16 @@ public class InfoMessage extends Thread {
             T.SLEEP(100);
             counter++;
             if (T.CREATE_AUCTION_MESSAGE != null) {
-                if (T.CREATE_AUCTION_MESSAGE.equals(T.AUCTION_SUCCESS)) {
+                String info = T.CREATE_AUCTION_MESSAGE.substring(0,1);
+                if (info.equals(T.AUCTION_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Auction created.", Toast.LENGTH_LONG);
+                    String auctionId = T.CREATE_AUCTION_MESSAGE.substring(1);
+                    T.AC = new AuctionConnection(this.context, auctionId);
+                    T.AC.start();
                     Intent intent = new Intent(this.context, MainActivity.class);
                     this.context.startActivity(intent);
                 }
-                else if (T.CREATE_AUCTION_MESSAGE.equals(T.AUCTION_ERROR)) {
+                else if (info.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
@@ -267,7 +274,9 @@ public class InfoMessage extends Thread {
             if (T.PARTICIPATE_MESSAGE != null) {
                 if (T.PARTICIPATE_MESSAGE.equals(T.SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Participation done.", Toast.LENGTH_LONG);
+                    ParticipatedAuctions.auctionsParticipated.add(ui.getAuction_id()); // store participated auction
                     T.AC = new AuctionConnection(this.context, String.valueOf(ui.getAuction_id()));
+                    T.AC.start();
                 }
                 else if (T.PARTICIPATE_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
@@ -280,6 +289,10 @@ public class InfoMessage extends Thread {
             }
         }
         T.PARTICIPATE_MESSAGE = null;
+    }
+
+    public void bid() {
+
     }
 
 }
