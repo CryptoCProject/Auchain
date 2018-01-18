@@ -36,7 +36,6 @@ public class MyRecyclerViewFragment extends Fragment {
     //variable to store auctions
     ArrayList<HashMap<String, String>> auctionList;
 
-
     public MyRecyclerViewFragment() {
     }
 

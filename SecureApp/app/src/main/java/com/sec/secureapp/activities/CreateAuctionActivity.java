@@ -62,7 +62,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
     private void setSpinner(String[] spinner_items, Spinner spinner) {
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinner_items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_list_style, spinner_items);
         //set the spinners adapter to the previously created one.
         spinner.setAdapter(adapter);
         if (spinner == binding.createType)
@@ -82,11 +82,15 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
                 dialog();
                 break;
             case R.id.create_submit:
-                if (everythingGood())
-                    new InfoMessage(CreateAuctionActivity.this, T.CREATE_AUCTION, new AuctionInfo(auctionType, auctioneerId, objectName, Double.parseDouble(initialPrice.substring(1)))).start();
+                if (everythingGood()) {
+                    new InfoMessage(CreateAuctionActivity.this, T.CREATE_AUCTION, new AuctionInfo(auctionType, auctioneerId, objectName, Double.parseDouble(cleanPrice(initialPrice))/100)).start();
+                }
                 break;
             case R.id.create_duration:
                 durationPicker();
+                break;
+            default:
+                break;
         }
     }
 
@@ -97,11 +101,18 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
         if (objectName.matches("")) {
             T.VIEW_TOAST(getApplicationContext(), "Please Choose Object", Toast.LENGTH_SHORT);
             return false;
-        } else if (initialPrice.matches("")) {
+        } else if (cleanPrice(initialPrice).matches("")) {
             T.VIEW_TOAST(getApplicationContext(), "Please Choose Initial Price", Toast.LENGTH_SHORT);
             return false;
         }
         return true;
+    }
+
+    private String cleanPrice(String price) {
+        String replaceable = String.format("[%s,.\\s]", NumberFormat.getCurrencyInstance().getCurrency().getSymbol());
+        String cleanString = price.replaceAll(replaceable, "");
+
+        return cleanString;
     }
 
     @Override
@@ -110,15 +121,19 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
     }
 
     private String current = "";
+
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if(!charSequence.toString().equals(current)){
-       binding.createPrice.removeTextChangedListener(this);
+        System.out.println("****" + charSequence);
+        if (!charSequence.toString().equals(current)) {
+            binding.createPrice.removeTextChangedListener(this);
 
-            String cleanString = charSequence.toString().replaceAll("[$,.]", "");
+            String replaceable = String.format("[%s,.\\s]", NumberFormat.getCurrencyInstance().getCurrency().getSymbol());
+            String cleanString = charSequence.toString().replaceAll(replaceable, "");
 
-            double parsed = Double.parseDouble(cleanString);
-            String formatted = NumberFormat.getCurrencyInstance().format((parsed/100));
+
+            double parsed = Double.parseDouble(cleanPrice(charSequence.toString()));
+            String formatted = NumberFormat.getCurrencyInstance().format((parsed / 100));
 
             current = formatted;
             binding.createPrice.setText(formatted);
@@ -150,6 +165,8 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
             case 0:
                 auctionType = "english";
                 T.VIEW_TOAST(getApplicationContext(), auctionType, Toast.LENGTH_SHORT);
+                break;
+            default:
                 break;
         }
     }

@@ -105,7 +105,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.signup_signup_button: {
+            case R.id.signup_signup_button:
                 String n = binding.usernameSignup.getText().toString();
                 String p = binding.passwordSignup.getText().toString();
                 String c = binding.confirmPasswordSignup.getText().toString();
@@ -114,12 +114,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     new InfoMessage(SignupActivity.this, T.SIGN_UP, new UserInfo(n, p, e, null, null)).start();
                 }
                 break;
-            }
-            case R.id.cancel_signup_button: {
+
+            case R.id.cancel_signup_button:
                 Intent setIntent = new Intent(this, LoginActivity.class);
                 startActivity(setIntent);
                 break;
-            }
+            default:
+                break;
         }
     }
 }
