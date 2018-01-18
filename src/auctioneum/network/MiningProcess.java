@@ -36,7 +36,7 @@ public class MiningProcess implements Runnable{
      * @param substring
      * @return
      */
-    private int count(final String substring, final String string){
+    private int count(final String string, final String substring){
         int count = 0;
         int idx = 0;
 

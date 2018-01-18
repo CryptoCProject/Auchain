@@ -6,6 +6,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,7 +21,9 @@ public class Settings {
 
     public static int VALIDATIONS_PORT;
 
-    public static List<Regulator> REGULATORS;
+    public static List<Node> PEERS;
+
+    public static Regulator REGULATOR;
 
 
     static {
@@ -30,7 +34,14 @@ public class Settings {
         }
         TRANSACTIONS_PORT = 4572;
         VALIDATIONS_PORT = 8338;
-        REGULATORS = new ArrayList<>();
+        PEERS = new ArrayList<>();
+        REGULATOR = new Regulator();
+        REGULATOR.setPort(7777);
+        try {
+            REGULATOR.setIp(InetAddress.getByName("zafeiratosv.ddns.net"));
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
