@@ -170,7 +170,7 @@ public class SSLclient extends Thread {
                             T.PARTICIPATE_MESSAGE = s.substring(2);
                         }
                         else if (s.startsWith(T.CONNECT_AUCTION_CONFIRM)) {
-                            T.VIEW_TOAST(context, "Auction with id: "+s+" has started!", Toast.LENGTH_LONG);
+                            T.CONNECT_AUCTION_MESSAGE = s.substring(2);
                         }
                     }
 

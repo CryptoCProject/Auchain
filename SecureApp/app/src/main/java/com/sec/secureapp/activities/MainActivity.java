@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        waitRefresh();
+//        waitRefresh();
     }
 
     // refresh viewpager
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // show dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Downloading your data...");
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.show();
     }
 

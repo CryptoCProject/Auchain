@@ -209,7 +209,7 @@ public class InfoMessage extends Thread {
     }
 
     private void getRunningAuctions(UserInfo ui) {
-        client.sendMessage(T.RUNNING_AUCTIONS + T.getJson(new String[]{"u", hash.getHashedCode(ui.getName())}).toString());
+        client.sendMessage(T.RUNNING_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
         int counter = 0;
         for (;;) {
             T.SLEEP(100);
@@ -243,16 +243,17 @@ public class InfoMessage extends Thread {
             T.SLEEP(100);
             counter++;
             if (T.CREATE_AUCTION_MESSAGE != null) {
-                String info = T.CREATE_AUCTION_MESSAGE.substring(0,1);
-                if (info.equals(T.AUCTION_SUCCESS)) {
+                String mes = T.CREATE_AUCTION_MESSAGE.substring(0,1);
+                System.out.println(mes);
+                if (mes.equals(T.AUCTION_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Auction created.", Toast.LENGTH_LONG);
-                    String auctionId = T.CREATE_AUCTION_MESSAGE.substring(1);
-                    T.AC = new AuctionConnection(this.context, auctionId);
+                    String auction_id = T.CREATE_AUCTION_MESSAGE.substring(1);
+                    T.AC = new AuctionConnection(this.context, auction_id, "0");
                     T.AC.start();
                     Intent intent = new Intent(this.context, MainActivity.class);
                     this.context.startActivity(intent);
                 }
-                else if (info.equals(T.AUCTION_ERROR)) {
+                else if (mes.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
@@ -275,7 +276,7 @@ public class InfoMessage extends Thread {
                 if (T.PARTICIPATE_MESSAGE.equals(T.SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Participation done.", Toast.LENGTH_LONG);
                     ParticipatedAuctions.auctionsParticipated.add(ui.getAuction_id()); // store participated auction
-                    T.AC = new AuctionConnection(this.context, String.valueOf(ui.getAuction_id()));
+                    T.AC = new AuctionConnection(this.context, String.valueOf(ui.getAuction_id()), "1");
                     T.AC.start();
                 }
                 else if (T.PARTICIPATE_MESSAGE.equals(T.NOT_SUCCESS)) {

@@ -21,7 +21,7 @@ public class T {
     public static String USER_ID;
     public static AuctionConnection AC;
 
-    public static String SERVER_IP = "zafeiratosv.ddns.net";
+    public static String SERVER_IP = "192.168.1.3";//"zafeiratosv.ddns.net";
     public static int SERVER_PORT = 54321;
     public static String CERT_NAME = "sslsec.bks";
 
