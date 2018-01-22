@@ -5,12 +5,15 @@ import auctioneum.blockchain.Block;
 import auctioneum.blockchain.BlockChain;
 import auctioneum.blockchain.Transaction;
 import auctioneum.utils.files.FileManager;
+import auctioneum.utils.keys.RSA;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class Node implements Serializable{
@@ -25,7 +28,7 @@ public class Node implements Serializable{
     private List<Transaction> txPool;
 
     /** Node's peers **/
-    private List<Node> peers;
+    private List<InetAddress> peers;
 
     /** The ip address of the logged node **/
     private InetAddress ip;
@@ -63,7 +66,35 @@ public class Node implements Serializable{
 
     /**----------------------------------- Network ----------------------------------**/
 
-    public void connect(){}
+    public void register(){
+        try{
+            Channel<String> channel = new Channel<>();
+            Request request = new Request(Request.REGISTER,null);
+            InetAddress serverIP = InetAddress.getByName("zafeiratos.ddns.net");
+            int port = 54321;
+            List<String> keys = channel.getData(request,serverIP,port);
+            for(String key: keys){
+                FileManager.storeToDisk("PublicKey",key);
+                FileManager.storeToDisk("PrivateKey",key);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void connect(){
+        try {
+            Channel<Account> channel = new Channel<>();
+            String signedServiceType = RSA.sign(Request.CONNECT,RSA.getPrivateKeyFromString(FileManager.readFile("PrivateKey")));
+            List<String> params = new ArrayList<>();
+            params.add(FileManager.readFile("PublicKey"));
+            Optional<List<String>> optionalParams = Optional.of(params);
+            Request request = new Request(signedServiceType,optionalParams);
+            this.setAccount(channel.getData(request,InetAddress.getByName("zafeiratos.ddns.net"),54321).get(0));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void updatePeers(){}
 
@@ -207,11 +238,11 @@ public class Node implements Serializable{
         this.blockChain = blockChain;
     }
 
-    public List<Node> getPeers() {
+    public List<InetAddress> getPeers() {
         return this.peers;
     }
 
-    public void setPeers(List<Node> peers) {
+    public void setPeers(List<InetAddress> peers) {
         this.peers = peers;
     }
 
