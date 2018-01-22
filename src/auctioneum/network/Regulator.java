@@ -2,17 +2,16 @@ package auctioneum.network;
 
 
 import auctioneum.blockchain.Account;
-import auctioneum.blockchain.Block;
 
-import java.net.Socket;
-import java.util.List;
+import java.net.InetAddress;
 import java.util.Map;
 import java.util.TreeMap;
 
 /** Responsible for connections,updates in the network **/
 public class Regulator extends Node{
 
-    private Map<Integer,Node> advertisedPeers;
+    private Map<Integer,InetAddress> advertisedPeers;
+
     private int port = 7777;
     
     public Regulator(){}
@@ -23,15 +22,19 @@ public class Regulator extends Node{
     }
 
 
+    public void addPeer(InetAddress ip){
+        this.advertisedPeers.put(0,ip);
+    }
 
-    public Map<Integer, Node> getAdvertisedPeers() {
+    //public void
+
+    public Map<Integer, InetAddress> getAdvertisedPeers() {
         return this.advertisedPeers;
     }
 
-    public void setAdvertisedPeers(Map<Integer, Node> advertisedPeers) {
+    public void setAdvertisedPeers(Map<Integer, InetAddress> advertisedPeers) {
         this.advertisedPeers = advertisedPeers;
     }
-
 
     public void setPort(int port) {
         this.port = port;
