@@ -21,7 +21,7 @@ public class Settings {
 
     public static int VALIDATIONS_PORT;
 
-    public static List<InetAddress> PEERS;
+    public static List<Node> PEERS;
 
     public static Regulator REGULATOR;
 

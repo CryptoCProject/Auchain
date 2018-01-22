@@ -44,15 +44,15 @@ public class ConnectionService implements Runnable{
                 this.owner.addPeer(this.connection.getInetAddress());
                 //Update peers Service
                 int nodesKept = this.owner.getAdvertisedPeers().size();
-                int peersToSend = nodesKept > NODES_THRES_DOWN ? (int) (0.1 * nodesKept) : nodesKept;
-                oos.writeObject(peersToSend);
+            int peersToSend = nodesKept > NODES_THRES_DOWN ? (int) (0.1 * nodesKept) : nodesKept;
+            oos.writeObject(peersToSend);
+            oos.flush();
+            for (int i = 0; i < peersToSend; i++) {
+                oos.writeObject(this.owner.getAdvertisedPeers().values().toArray()[i]);
                 oos.flush();
-                for (int i = 0; i < peersToSend; i++) {
-                    oos.writeObject(this.owner.getAdvertisedPeers().values().toArray()[i]);
-                    oos.flush();
-                }
-                oos.close();
             }
+            oos.close();
+        }
             else {
                 this.connection.close();
             }

@@ -28,7 +28,7 @@ public class Node implements Serializable{
     private List<Transaction> txPool;
 
     /** Node's peers **/
-    private List<InetAddress> peers;
+    private List<Node> peers;
 
     /** The ip address of the logged node **/
     private InetAddress ip;
@@ -238,11 +238,11 @@ public class Node implements Serializable{
         this.blockChain = blockChain;
     }
 
-    public List<InetAddress> getPeers() {
+    public List<Node> getPeers() {
         return this.peers;
     }
 
-    public void setPeers(List<InetAddress> peers) {
+    public void setPeers(List<Node> peers) {
         this.peers = peers;
     }
 

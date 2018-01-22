@@ -10,7 +10,7 @@ import java.util.TreeMap;
 /** Responsible for connections,updates in the network **/
 public class Regulator extends Node{
 
-    private Map<Integer,InetAddress> advertisedPeers;
+    private Map<Integer,Node> advertisedPeers;
 
     private int port = 7777;
     
@@ -23,16 +23,20 @@ public class Regulator extends Node{
 
 
     public void addPeer(InetAddress ip){
-        this.advertisedPeers.put(0,ip);
+        Node peer = new Node();
+        peer.setIp(ip);
+        peer.setTransactionsPort(Settings.TRANSACTIONS_PORT);
+        peer.setValidationsPort(Settings.VALIDATIONS_PORT);
+        this.advertisedPeers.put(0,peer);
     }
 
     //public void
 
-    public Map<Integer, InetAddress> getAdvertisedPeers() {
+    public Map<Integer, Node> getAdvertisedPeers() {
         return this.advertisedPeers;
     }
 
-    public void setAdvertisedPeers(Map<Integer, InetAddress> advertisedPeers) {
+    public void setAdvertisedPeers(Map<Integer, Node> advertisedPeers) {
         this.advertisedPeers = advertisedPeers;
     }
 
