@@ -6,16 +6,15 @@ import java.util.List;
 
 public class FileManager {
 
-    public final String filesDirPath = "";
+    public static final String KEY_STORAGE_DIR = "";
 
-    private File requestedFile;
 
-    public synchronized boolean storeToDisk(String key, String content){
+    public static boolean storeToDisk(String name, String content){
         try {
-            this.requestedFile = new File(this.filesDirPath + key + ".json");
-            if (!this.requestedFile.exists()) {
-                this.requestedFile.createNewFile();
-                FileWriter fw = new FileWriter(this.requestedFile);
+            File file = new File(KEY_STORAGE_DIR + name + ".ks");
+            if (!file.exists()) {
+                file.createNewFile();
+                FileWriter fw = new FileWriter(file);
                 fw.write(content);
                 fw.flush();
                 fw.close();
@@ -27,13 +26,12 @@ public class FileManager {
         }
     }
 
-
-    public synchronized String getFile(String key){
-        this.requestedFile = new File(this.filesDirPath + key + ".json");
+    public static String readFile(String name){
+        File file = new File(KEY_STORAGE_DIR + name + ".ks");
         try {
-            if (this.requestedFile.exists()){
+            if (file.exists()){
                 StringBuilder sb = new StringBuilder();
-                FileReader fr = new FileReader(this.requestedFile);
+                FileReader fr = new FileReader(file);
                 BufferedReader br = new BufferedReader(fr);
                 String line;
                 while ((line=br.readLine())!= null){
@@ -51,28 +49,6 @@ public class FileManager {
         catch (Exception e){
             return null;
         }
-    }
-
-    public synchronized boolean fileExists(String key){
-        this.requestedFile = new File(this.filesDirPath + key + ".json");
-        return this.requestedFile.exists();
-    }
-
-    public void removeFiles(List<File> filesToRemove){
-        for (File file:filesToRemove){
-            file.delete();
-        }
-    }
-
-    public static void main(String[] args){
-        try {
-            Socket s = new Socket("zafeiratosv.ddns.net",54321);
-            ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
-            oos.writeObject("HEllo mr Zafeiratos!!");
-            oos.flush();
-            oos.close();
-        }catch (Exception e){}
-
     }
 
 

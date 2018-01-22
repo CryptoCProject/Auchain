@@ -73,9 +73,8 @@ public class Server <S extends Runnable>implements Runnable{
         catch (IOException ioe){
             ioe.printStackTrace();
         }
-
-
     }
+
 
 }
 

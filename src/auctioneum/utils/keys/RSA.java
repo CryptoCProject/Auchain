@@ -18,26 +18,16 @@ public class RSA {
         return pair;
     }
 
-    public void savePubKey(PublicKey publicKey, String filePath){
+    public static PrivateKey getPrivateKeyFromString(String key) {
         try {
-            X509EncodedKeySpec x509ks = new X509EncodedKeySpec(
-                    publicKey.getEncoded());
-            FileOutputStream fos = new FileOutputStream(filePath);
-            fos.write(x509ks.getEncoded());
-        }catch (Exception e){
+            byte[] byteKey = Base64.getDecoder().decode(key.getBytes());
+            X509EncodedKeySpec X509privateKey = new X509EncodedKeySpec(byteKey);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            return kf.generatePrivate(X509privateKey);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void savePrivKey(PrivateKey privateKey, String filePath){
-        try {
-            PKCS8EncodedKeySpec pkcsKeySpec = new PKCS8EncodedKeySpec(
-                    privateKey.getEncoded());
-            FileOutputStream fos = new FileOutputStream(filePath);
-            fos.write(pkcsKeySpec.getEncoded());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        return null;
     }
 
 

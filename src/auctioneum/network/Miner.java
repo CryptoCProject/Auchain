@@ -69,6 +69,11 @@ public class Miner extends Node {
         }
     }
 
+    @Override
+    public void connect(){
+
+
+    }
 
 
     public void start(){}

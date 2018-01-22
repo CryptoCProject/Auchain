@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package smartcontract;
+package auctioneum.smartcontract;
 
 import java.util.List;
 
@@ -12,8 +12,7 @@ import java.util.List;
  * @author panagiotisspentzouris
  */
 public class EnglishAuction implements Auction{
-    
-    
+
 
     /** Item to be sold **/
     private Item item; // TODO: Implement class Item
