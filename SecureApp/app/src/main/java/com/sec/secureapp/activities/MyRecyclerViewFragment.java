@@ -100,6 +100,7 @@ public class MyRecyclerViewFragment extends Fragment {
 
     // get information from json received from server
     public void jsonToObject(String auctions) throws JSONException {
+        System.out.println("****Auctions: ****"+auctions);
         JSONArray jArray = new JSONArray(auctions);
         for (int i = 0; i < jArray.length(); i++) {
 

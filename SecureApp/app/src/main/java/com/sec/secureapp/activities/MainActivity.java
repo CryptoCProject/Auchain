@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // progress dialog showing until data is fetched
     ProgressDialog progressDialog;
 
-    int received = 0;
+    int received_open = 0;
+    int received_running = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +113,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-//        waitRefresh();
+        waitRefresh();
     }
 
     // refresh viewpager
     public void refresh() {
         waitRefresh();
-        received = 0;
+        received_open = 0;
+        received_running = 0;
         sendMessages();
         createReceivers();
     }
@@ -127,14 +129,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // filter used for receiver
         IntentFilter filter = new IntentFilter();
 
-        // create a receiver for running auctions and wait response from server
+        // create a receiver for open auctions and wait response from server
         openAuctionReceiver = new AuctionReceiver();
-        filter.addAction("com.sec.secureapp.OPEN_AUCTIONS");
+        filter.addAction(getString(R.string.open_receiver));
         registerReceiver(openAuctionReceiver, filter);
 
         // create a receiver for running auctions and wait response from server
         runningAuctionReceiver = new AuctionReceiver();
-        filter.addAction("com.sec.secureapp.RUNNING_AUCTIONS");
+        filter.addAction(getString(R.string.running_receiver));
         registerReceiver(runningAuctionReceiver, filter);
     }
 
@@ -250,8 +252,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void unregisterReceivers() {
-        unregisterReceiver(runningAuctionReceiver);
         unregisterReceiver(openAuctionReceiver);
+        unregisterReceiver(runningAuctionReceiver);
     }
 
     class AuctionReceiver extends BroadcastReceiver {
@@ -259,19 +261,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
 
-
-            boolean running = intent.getBooleanExtra("running", false);
-
-            if (running) {
-                runningAuctions = intent.getStringExtra("getAuctions");
-                received++;
-            } else {
+            if (intent.getAction() != null && intent.getAction().equals(getString(R.string.open_receiver)) && received_open == 0) {
                 openAuctions = intent.getStringExtra("getAuctions");
-                received++;
+                received_open++;
+            } else if ((intent.getAction() != null && intent.getAction().equals(getString(R.string.running_receiver)) && received_running == 0)) {
+                runningAuctions = intent.getStringExtra("getAuctions");
+                received_running++;
             }
 
-
-            if (received == 2) {
+            if (received_running == 1 && received_open == 1) {
 
                 unregisterReceivers();
 
@@ -304,6 +302,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     dialog.cancel();
                                     createDialog();
                                     refresh();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
                                 }
                             });
                     AlertDialog alert = builder.create();

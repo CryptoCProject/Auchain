@@ -220,9 +220,10 @@ public class InfoMessage extends Thread {
                 }
                 else {
                     String data = T.RUNNING_AUCTIONS_MESSAGE;
-                    Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
+                    Intent i = new Intent("com.sec.secureapp.RUNNING_AUCTIONS");
                     i.putExtra("getAuctions", data);
-                    i.putExtra("running", false);
+                    i.putExtra("running", true);
+                    System.out.println("****Running: ****");
                     context.sendBroadcast(i);
                     break;
                 }
