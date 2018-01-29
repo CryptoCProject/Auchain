@@ -61,7 +61,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_attach_money"/>
+                android:src="@drawable/ic_account_balance_wallet"/>
 
             <TextView
                 android:id="@+id/profile_balance"
@@ -95,13 +95,29 @@
                 android:text="Account Mail"/>
         </LinearLayout>
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:id="@+id/profile_show_auctions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/profile_show_auctions"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/profile_add_funds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_add_funds"/>
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/profile_show_auctions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_show_auctions"/>
+
+        </LinearLayout>
+
 
     </LinearLayout>
 </layout>

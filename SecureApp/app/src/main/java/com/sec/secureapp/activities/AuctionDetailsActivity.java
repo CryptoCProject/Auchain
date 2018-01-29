@@ -18,8 +18,10 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
     ActivityAuctionDetailsBinding binding;
 
     private int auction_id;
+    private String auctions = "";
 
-    private boolean running = false;
+    //0: open, 1: running, 2:finished
+    private int type = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +36,17 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
             binding.auctionObject.setText(bundle.getString("object"));
             binding.auctionAuctioneer.setText(bundle.getString("auctioneer"));
             binding.auctionPrice.setText(getString(R.string.auction_price, Double.parseDouble(bundle.getString("price"))));
-            running = bundle.getBoolean("running");
-            binding.auctionAction.setText((running ? "Bid" : "Participate"));
+            type = bundle.getInt("running");
+            binding.auctionAction.setText((type == 1 ? "Bid" : "Participate"));
 
-            if (!running && bundle.getString("participated").equals("1")) {
+            auctions = bundle.getString("auctions");
+
+            // if finished
+            if (type == 2) {
+                binding.auctionAction.setVisibility(View.GONE);
+            }
+
+            if (type == 0 && bundle.getString("participated").equals("1")) {
                 binding.auctionAction.setText("Already Participated");
                 binding.auctionAction.setEnabled(false);
             }
@@ -61,15 +70,22 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        // determine which was the previous activity
+        if (type == 2) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra("auctions", auctions);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.auction_action:
-                if (!running)
+                if (type == 0)
                     participate();
                 else
                     bid();

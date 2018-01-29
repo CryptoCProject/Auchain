@@ -54,9 +54,22 @@
 
     <!-- Profile Page -->
     <string name="profile_show_auctions">Show Auctions</string>
+    <string name="profile_add_funds">Add Funds</string>
 
     <!-- Broadcast Receivers -->
     <string name="open_receiver">com.sec.secureapp.OPEN_AUCTIONS</string>
     <string name="running_receiver">com.sec.secureapp.RUNNING_AUCTIONS</string>
+    <string name="finished_receiver">com.sec.secureapp.FINISHED_AUCTIONS</string>
+
+    <!-- Dialogs -->
+    <string name="progress_dialog">Downloading data…</string>
+    <string name="please_wait">Please wait</string>
+    <string name="error">Error</string>
+    <string name="refresh">Refresh</string>
+    <string name="cancel">Cancel</string>
+    <string name="went_wrong">Something went wrong :(.. Please refresh.</string>
+    <string name="finished">Finished Auctions</string>
+    <string name="add_funds">Add Funds</string>
+    <string name="insert_amount">Insert the amount you wish: \n$ 1.00 -> Z 0.00001</string>
 
 </resources>

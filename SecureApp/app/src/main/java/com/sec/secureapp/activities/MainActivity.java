@@ -1,18 +1,13 @@
 package com.sec.secureapp.activities;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityMainBinding;
 import com.sec.secureapp.general.InfoMessage;
@@ -43,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // string with json got from server
     String runningAuctions = "";
     String openAuctions = "";
+    String finishedAuctions = "";
 
     // the tab titles
     String[] tabTitles = {"OPEN", "RUNNING"};
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ViewPagerAdapter adapter;
 
     // progress dialog showing until data is fetched
-    ProgressDialog progressDialog;
+    MaterialDialog progressDialog;
 
     int received_open = 0;
     int received_running = 0;
@@ -141,11 +139,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void createDialog() {
-        // show dialog
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Downloading your data...");
-        progressDialog.setCancelable(true);
-        progressDialog.show();
+        progressDialog = new MaterialDialog.Builder(this)
+                .title(R.string.progress_dialog)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .cancelable(false)
+                .show();
     }
 
     private void sendMessages() {
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Setting View Pager
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabTitles, tabTitles.length);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabTitles, tabTitles.length, openAuctions, runningAuctions);
         viewPager.setAdapter(adapter);
     }
 
@@ -169,43 +168,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 break;
-        }
-    }
-
-    //View Pager fragments setting adapter class
-    class ViewPagerAdapter extends FragmentStatePagerAdapter {
-        String[] tabTitles;
-        int numOfTabs;
-
-        public ViewPagerAdapter(FragmentManager manager, String[] tabTitles, int numOfTabs) {
-            super(manager);
-
-            this.tabTitles = tabTitles;
-            this.numOfTabs = numOfTabs;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {// if the position is 0 we are returning the First tab
-                case 0:
-                    MyRecyclerViewFragment openFragment = new MyRecyclerViewFragment(false, openAuctions);
-                    return openFragment;
-                case 1:
-                    MyRecyclerViewFragment runningFragment = new MyRecyclerViewFragment(true, runningAuctions);
-                    return runningFragment;
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return numOfTabs;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
         }
     }
 
@@ -227,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.action_profile:
                 intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("auctions", openAuctions); //send finished auctions
                 this.startActivity(intent);
                 break;
             case R.id.action_logout:
@@ -261,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            //TODO: Add finished
             if (intent.getAction() != null && intent.getAction().equals(getString(R.string.open_receiver)) && received_open == 0) {
                 openAuctions = intent.getStringExtra("getAuctions");
                 received_open++;
@@ -294,23 +258,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Something went wrong :(.. Please refresh.")
-                            .setCancelable(false)
-                            .setPositiveButton("Refresh", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+
+                    new MaterialDialog.Builder(MainActivity.this)
+                            .title(R.string.error)
+                            .content(R.string.went_wrong)
+                            .cancelable(false)
+                            .positiveText(R.string.refresh)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     dialog.cancel();
                                     createDialog();
                                     refresh();
                                 }
                             })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                            .negativeText(R.string.cancel)
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     dialog.cancel();
                                 }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                            })
+                            .show();
                 }
 
             }
