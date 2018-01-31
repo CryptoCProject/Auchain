@@ -65,8 +65,14 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     // button action when in a running auction
     private void bid() {
-        new InfoMessage(this, T.BID, new ParticipationInfo(T.USER_ID, auction_id, price + price * 0.1)).start();
-        T.VIEW_TOAST(getApplicationContext(), "Bid Confirmed", Toast.LENGTH_SHORT);
+        double bidPrice = price + price * 0.1;
+
+        // check if the balance is sufficient
+        if (Double.parseDouble(T.BALANCE_MESSAGE) - bidPrice >= 0) {
+            new InfoMessage(this, T.BID, new ParticipationInfo(T.USER_ID, auction_id, bidPrice)).start();
+            T.VIEW_TOAST(getApplicationContext(), "Bid Confirmed", Toast.LENGTH_SHORT);
+        }
+        else T.VIEW_TOAST(this, "Insufficient balance, please add more funds to your account.", Toast.LENGTH_LONG);
     }
 
     // button action when in an open auction
@@ -128,7 +134,7 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction() != null && intent.getAction().equals(getString(R.string.bid_changed))) {
-                price = Double.parseDouble(ParticipatedAuctions.bids.get(""+auction_id));
+                price = Double.parseDouble(ParticipatedAuctions.bids.get("" + auction_id));
                 binding.auctionPrice.setText(getString(R.string.auction_price, price));
             }
         }

@@ -312,7 +312,8 @@ public class InfoMessage extends Thread {
             T.SLEEP(100);
             counter++;
             if (T.EXCHANGE_MESSAGE != null) {
-                T.VIEW_TOAST(this.context, "Exchange done.", Toast.LENGTH_LONG);
+                //T.VIEW_TOAST(this.context, "Exchange done.", Toast.LENGTH_LONG);
+                System.out.println("Exchange done.");
                 break;
             } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
@@ -329,8 +330,7 @@ public class InfoMessage extends Thread {
             counter++;
             if (T.ADD_FUNDS_MESSAGE != null) {
                 if (T.ADD_FUNDS_MESSAGE.equals(T.SUCCESS)) {
-                    //T.VIEW_TOAST(this.context, "Funds added.", Toast.LENGTH_LONG);
-                    System.out.println("Funds added.");
+                    T.VIEW_TOAST(this.context, "Zafeirium added to account "+(Double.parseDouble(ui.getPwd())*Double.parseDouble(T.EXCHANGE_MESSAGE)), Toast.LENGTH_LONG);
                 } else if (T.ADD_FUNDS_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }

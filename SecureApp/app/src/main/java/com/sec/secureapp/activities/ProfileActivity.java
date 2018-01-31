@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -96,7 +97,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         .show();
                 break;
             case R.id.profile_add_funds:
-                T.VIEW_TOAST(getApplicationContext(), "Add funds", Toast.LENGTH_SHORT);
                 new MaterialDialog.Builder(this)
                         .title(R.string.add_funds)
                         .content(R.string.insert_amount, Double.parseDouble(T.EXCHANGE_MESSAGE))
@@ -108,8 +108,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 int funds = Integer.parseInt("" + input);
                                 new InfoMessage(getApplicationContext(), T.ADD_FUNDS, new UserInfo(T.USER_ID, "" + funds, null, null, null)).start(); // pwd is funds for this method
                                 double zafeirium = funds * Double.parseDouble(T.EXCHANGE_MESSAGE);
-                                T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account " + getString(R.string.profile_balance, zafeirium), Toast.LENGTH_LONG);
-                                new InfoMessage(getApplicationContext(), T.BALANCE, new UserInfo(T.USER_ID, null, null, null, null)).start();
+                                //T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account " + getString(R.string.profile_balance, zafeirium), Toast.LENGTH_LONG);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new InfoMessage(getApplicationContext(), T.BALANCE, new UserInfo(T.USER_ID, null, null, null, null)).start();
+                                    }
+                                }, 500);
                             }
                         })
                         .negativeText(R.string.cancel)
