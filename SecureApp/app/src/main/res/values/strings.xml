@@ -75,4 +75,7 @@
     <string name="add_funds">Add Funds</string>
     <string name="insert_amount">Insert the amount you wish: \n$ 1.00 -> Z $%.5f</string>
 
+    <!-- RecyclerView -->
+    <string name="no_auctions">There are no auctions available :(</string>
+
 </resources>

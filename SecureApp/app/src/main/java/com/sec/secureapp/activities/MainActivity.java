@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         received_open = 0;
         received_running = 0;
         sendMessages();
-        createReceivers();
+        //createReceivers();
     }
 
     private void createReceivers() {

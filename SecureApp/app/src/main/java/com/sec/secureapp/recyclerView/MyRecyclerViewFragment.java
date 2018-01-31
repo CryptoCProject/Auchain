@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.sec.secureapp.R;
 import com.sec.secureapp.activities.AuctionDetailsActivity;
@@ -32,6 +33,7 @@ public class MyRecyclerViewFragment extends Fragment {
     private boolean running;
 
     private static RecyclerView recyclerView;
+    private TextView emptyView;
 
     //variable to store auctions
     ArrayList<HashMap<String, String>> auctionList;
@@ -49,10 +51,19 @@ public class MyRecyclerViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.recycler_view, container, false);
 
-        // wait from server response with auctions
-        auctionList = new ArrayList<>();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        emptyView = (TextView) view.findViewById(R.id.empty_view);
 
-        setRecyclerView();
+        if (!auctions.equals("")) {
+            // wait from server response with auctions
+            auctionList = new ArrayList<>();
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+            setRecyclerView();
+        } else { // if there are no auctions
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
 
         return view;
 
@@ -61,7 +72,6 @@ public class MyRecyclerViewFragment extends Fragment {
     //Setting recycler view
     private void setRecyclerView() {
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//Linear Items
 
