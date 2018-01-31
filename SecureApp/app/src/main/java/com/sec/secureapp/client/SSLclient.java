@@ -6,7 +6,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.sec.secureapp.general.ParticipatedAuctions;
 import com.sec.secureapp.general.T;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -144,33 +148,45 @@ public class SSLclient extends Thread {
                         String s = (String) obj;
                         if (s.startsWith(T.SIGN_UP_CONFIRM)) {
                             T.SIGN_UP_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.PRIVATE_KEY)) {
+                        } else if (s.startsWith(T.PRIVATE_KEY)) {
                             T.SIGN_UP_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.LOG_IN_CONFIRM)) {
+                        } else if (s.startsWith(T.LOG_IN_CONFIRM)) {
                             T.LOG_IN_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.OTP_CONFIRM)) {
+                        } else if (s.startsWith(T.OTP_CONFIRM)) {
                             T.OTP_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.MAIN_CONFIRM)) {
+                        } else if (s.startsWith(T.MAIN_CONFIRM)) {
                             T.MAIN_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.OPEN_AUCTIONS_CONFIRM)) {
+                        } else if (s.startsWith(T.OPEN_AUCTIONS_CONFIRM)) {
                             T.OPEN_AUCTIONS_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.RUNNING_AUCTIONS_CONFIRM)) {
+                        } else if (s.startsWith(T.RUNNING_AUCTIONS_CONFIRM)) {
                             T.RUNNING_AUCTIONS_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.CREATE_AUCTION_CONFIRM)) {
+                        } else if (s.startsWith(T.CREATE_AUCTION_CONFIRM)) {
                             T.CREATE_AUCTION_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.PARTICIPATE_CONFIRM)) {
+                        } else if (s.startsWith(T.PARTICIPATE_CONFIRM)) {
                             T.PARTICIPATE_MESSAGE = s.substring(2);
-                        }
-                        else if (s.startsWith(T.CONNECT_AUCTION_CONFIRM)) {
+                        } else if (s.startsWith(T.CONNECT_AUCTION_CONFIRM)) {
                             T.CONNECT_AUCTION_MESSAGE = s.substring(2);
+                        }else if (s.startsWith(T.BID_CONFIRM)) {
+                            T.BID_MESSAGE = s.substring(2);
+                            String id = s.substring(3);
+                            try {
+                                JSONObject jsonObject = new JSONObject(id);
+                                String price = jsonObject.getString("p");
+                                String auction_id = jsonObject.getString("i");
+                                T.VIEW_TOAST(context, "New Bid: "+price+" at "+auction_id, Toast.LENGTH_SHORT);
+                                ParticipatedAuctions.bids.put(auction_id, price);
+                                System.out.println("****BIDS "+auction_id+" "+ParticipatedAuctions.bids.get(auction_id));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else if (s.startsWith(T.EXCHANGE)) {
+                            T.EXCHANGE_MESSAGE = s.substring(2);
+                        } else if (s.startsWith(T.ADD_FUNDS_CONFIRM)) {
+                            T.ADD_FUNDS_MESSAGE = s.substring(2);
+                        } else if (s.startsWith(T.BALANCE_CONFIRM)) {
+
+                            T.BALANCE_MESSAGE = s.substring(2);
                         }
                     }
 

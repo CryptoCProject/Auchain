@@ -151,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // send message to server for open and running auctions
         new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
         new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo(T.USER_ID, null, null, null, null)).start();
+        new InfoMessage(this, T.EXCHANGE, null).start();
+        new InfoMessage(this, T.BALANCE, new UserInfo(T.USER_ID, null, null, null, null)).start();
     }
 
     //Setting View Pager

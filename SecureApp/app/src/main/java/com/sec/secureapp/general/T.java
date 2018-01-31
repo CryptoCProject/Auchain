@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class T {
 
     public static DB DB;
-    public static String USER_ID = "Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=";
+    public static String USER_ID = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc="; // Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=
     public static AuctionConnection AC;
 
     public static String SERVER_IP = "zafeiratosv.ddns.net";//"zafeiratosv.ddns.net";
@@ -32,8 +32,8 @@ public class T {
     public static String WRONG_OTP = "5";
     public static String OTP_ERROR = "6";
     public static String PRIVATE_KEY_ACK = "7";
-    public static String AUCTION_SUCCESS= "8";
-    public static String AUCTION_ERROR= "9";
+    public static String AUCTION_SUCCESS = "8";
+    public static String AUCTION_ERROR = "9";
     public static String AUCTION_WAITING = "10";
     public static String AUCTION_RUNNING = "11";
     public static String AUCTION_FINISHED = "12";
@@ -67,8 +67,16 @@ public class T {
     public static String CONNECT_AUCTION = " r";
     public static String CONNECT_AUCTION_CONFIRM = " s";
 
-    public static String BID = "";
-    public static String BID_CONFIRM = "";
+    public static String BID = " t";
+    public static String BID_CONFIRM = " u";
+
+    public static String EXCHANGE = " v";
+    public static String ADD_FUNDS = " w";
+
+    public static String ADD_FUNDS_CONFIRM = " x";
+    public static String BALANCE = " y";
+
+    public static String BALANCE_CONFIRM = " z";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;
@@ -79,6 +87,10 @@ public class T {
     public static String RUNNING_AUCTIONS_MESSAGE = null;
     public static String PARTICIPATE_MESSAGE = null;
     public static String CONNECT_AUCTION_MESSAGE = null;
+    public static String BID_MESSAGE = null;
+    public static String EXCHANGE_MESSAGE = null;
+    public static String ADD_FUNDS_MESSAGE = null;
+    public static String BALANCE_MESSAGE = null;
 
     public static void VIEW_TOAST(final Context con, final String toast, final int dur) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -96,12 +108,12 @@ public class T {
         }
     }
 
-    public static JSONObject getJson (String ... strings) {
+    public static JSONObject getJson(String... strings) {
         JSONObject jo = new JSONObject();
-        HashMap <String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         int i = 0;
         try {
-            for(;;) {
+            for (; ; ) {
                 try {
                     map.put(strings[i], strings[i + 1]);
                     i += 2;

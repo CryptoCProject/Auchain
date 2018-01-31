@@ -70,6 +70,6 @@
     <string name="went_wrong">Something went wrong :(.. Please refresh.</string>
     <string name="finished">Finished Auctions</string>
     <string name="add_funds">Add Funds</string>
-    <string name="insert_amount">Insert the amount you wish: \n$ 1.00 -> Z 0.00001</string>
+    <string name="insert_amount">Insert the amount you wish: \n$ 1.00 -> Z $%.5f</string>
 
 </resources>

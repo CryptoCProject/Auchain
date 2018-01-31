@@ -6,10 +6,20 @@ public class ParticipationInfo {
 
     private String participant_id;
     private int auction_id;
+    private double price;
 
-    public ParticipationInfo(String participant_id, int auction_id) {
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public ParticipationInfo(String participant_id, int auction_id, double price) {
         this.participant_id = participant_id;
         this.auction_id = auction_id;
+        this.price = price;
     }
 
     public ParticipationInfo(){}

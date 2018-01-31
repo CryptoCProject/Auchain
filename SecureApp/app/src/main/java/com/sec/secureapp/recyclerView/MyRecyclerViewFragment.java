@@ -97,7 +97,6 @@ public class MyRecyclerViewFragment extends Fragment {
 
     // get information from json received from server
     public void jsonToObject(String auctions) throws JSONException {
-        System.out.println("****Auctions: ****"+auctions);
         JSONArray jArray = new JSONArray(auctions);
         for (int i = 0; i < jArray.length(); i++) {
 
@@ -111,10 +110,11 @@ public class MyRecyclerViewFragment extends Fragment {
             auction.put("object_name", jObject.getString("n"));
             auction.put("object_price", jObject.getString("p"));
 
+            ParticipatedAuctions.bids.put(jObject.getString("a"), jObject.getString("p"));
+
             if (ParticipatedAuctions.auctionsParticipated.contains(Integer.parseInt(jObject.getString("a")))) {
                 auction.put("participated", "1");
-            }
-            else auction.put("participated", "0");
+            } else auction.put("participated", "0");
 
             auctionList.add(auction);
         }

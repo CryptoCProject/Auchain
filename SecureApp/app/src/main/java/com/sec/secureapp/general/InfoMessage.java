@@ -32,30 +32,28 @@ public class InfoMessage extends Thread {
         client.start();
         if (this._case.equals(T.SIGN_UP)) {
             signup((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.LOG_IN)) {
+        } else if (this._case.equals(T.LOG_IN)) {
             login((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.OTP)) {
+        } else if (this._case.equals(T.OTP)) {
             otp((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.MAIN)) {
+        } else if (this._case.equals(T.MAIN)) {
             main(null);
-        }
-        else if (this._case.equals(T.OPEN_AUCTIONS)) {
+        } else if (this._case.equals(T.OPEN_AUCTIONS)) {
             getOpenAuctions();
-        }
-        else if (this._case.equals(T.RUNNING_AUCTIONS)) {
+        } else if (this._case.equals(T.RUNNING_AUCTIONS)) {
             getRunningAuctions((UserInfo) messageInfo);
-        }
-        else if (this._case.equals(T.CREATE_AUCTION)) {
+        } else if (this._case.equals(T.CREATE_AUCTION)) {
             createAuction((AuctionInfo) messageInfo);
-        }
-        else if (this._case.equals(T.PARTICIPATE)) {
+        } else if (this._case.equals(T.PARTICIPATE)) {
             participate((ParticipationInfo) messageInfo);
-        }
-        else if (this._case.equals(T.BID)) {
-            //bid((BidInfo) messageInfo);
+        } else if (this._case.equals(T.BID)) {
+            bid((ParticipationInfo) messageInfo);
+        } else if (this._case.equals(T.EXCHANGE)) {
+            getExchange();
+        } else if (this._case.equals(T.ADD_FUNDS)) {
+            addFunds((UserInfo) messageInfo);
+        } else if (this._case.equals(T.BALANCE)) {
+            getBalance((UserInfo) messageInfo);
         }
         client.closeCrap();
     }
@@ -183,14 +181,13 @@ public class InfoMessage extends Thread {
     private void getOpenAuctions() {
         client.sendMessage(T.OPEN_AUCTIONS);
         int counter = 0;
-        for (;;) {
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.OPEN_AUCTIONS_MESSAGE != null) {
                 if (T.OPEN_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
-                }
-                else {
+                } else {
                     String data = T.OPEN_AUCTIONS_MESSAGE;
                     Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
                     i.putExtra("getAuctions", data);
@@ -199,8 +196,7 @@ public class InfoMessage extends Thread {
                     break;
                 }
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -211,25 +207,22 @@ public class InfoMessage extends Thread {
     private void getRunningAuctions(UserInfo ui) {
         client.sendMessage(T.RUNNING_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
         int counter = 0;
-        for (;;) {
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.RUNNING_AUCTIONS_MESSAGE != null) {
                 if (T.RUNNING_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
-                }
-                else {
+                } else {
                     String data = T.RUNNING_AUCTIONS_MESSAGE;
                     Intent i = new Intent("com.sec.secureapp.RUNNING_AUCTIONS");
                     i.putExtra("getAuctions", data);
                     i.putExtra("running", true);
-                    System.out.println("****Running: ****");
                     context.sendBroadcast(i);
                     break;
                 }
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -240,11 +233,11 @@ public class InfoMessage extends Thread {
     private void createAuction(AuctionInfo ui) {
         client.sendMessage(T.CREATE_AUCTION + T.getJson(new String[]{"t", ui.getAuction_type(), "u", ui.getAuctioneer_id(), "o", ui.getObject_name(), "p", String.valueOf(ui.getInitial_price())}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.CREATE_AUCTION_MESSAGE != null) {
-                String mes = T.CREATE_AUCTION_MESSAGE.substring(0,1);
+                String mes = T.CREATE_AUCTION_MESSAGE.substring(0, 1);
                 System.out.println(mes);
                 if (mes.equals(T.AUCTION_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Auction created.", Toast.LENGTH_LONG);
@@ -253,13 +246,11 @@ public class InfoMessage extends Thread {
                     T.AC.start();
                     Intent intent = new Intent(this.context, MainActivity.class);
                     this.context.startActivity(intent);
-                }
-                else if (mes.equals(T.AUCTION_ERROR)) {
+                } else if (mes.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            }
-            else if (counter == 50) {
+            } else if (counter == 50) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -270,7 +261,7 @@ public class InfoMessage extends Thread {
     private void participate(ParticipationInfo ui) {
         client.sendMessage(T.PARTICIPATE + T.getJson(new String[]{"u", ui.getParticipant_id(), "i", String.valueOf(ui.getAuction_id())}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.PARTICIPATE_MESSAGE != null) {
@@ -279,8 +270,30 @@ public class InfoMessage extends Thread {
                     ParticipatedAuctions.auctionsParticipated.add(ui.getAuction_id()); // store participated auction
                     T.AC = new AuctionConnection(this.context, String.valueOf(ui.getAuction_id()), "1");
                     T.AC.start();
+                } else if (T.PARTICIPATE_MESSAGE.equals(T.NOT_SUCCESS)) {
+                    T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
-                else if (T.PARTICIPATE_MESSAGE.equals(T.NOT_SUCCESS)) {
+                break;
+            } else if (counter == 50) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+        T.PARTICIPATE_MESSAGE = null;
+    }
+
+    public void bid(ParticipationInfo ui) {
+        client.sendMessage(T.BID + T.getJson(new String[]{"u", ui.getParticipant_id(), "i", String.valueOf(ui.getAuction_id()), "p", String.valueOf(ui.getPrice())}).toString());
+        int counter = 0;
+        for (;;){
+            T.SLEEP(100);
+            counter++;
+            if (T.BID_MESSAGE != null) {
+                String mes = T.BID_MESSAGE.substring(0,1);
+                if (mes.equals(T.SUCCESS)) {
+//                    T.VIEW_TOAST(this.context, "New bid: " +  T.BID_MESSAGE.substring(1), Toast.LENGTH_LONG);
+                }
+                else if (mes.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
@@ -290,11 +303,67 @@ public class InfoMessage extends Thread {
                 break;
             }
         }
-        T.PARTICIPATE_MESSAGE = null;
+        T.BID_MESSAGE = null;
     }
 
-    public void bid() {
-
+    public void getExchange() {
+        client.sendMessage(T.EXCHANGE);
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.EXCHANGE_MESSAGE != null) {
+                T.VIEW_TOAST(this.context, "Exchange done.", Toast.LENGTH_LONG);
+                break;
+            } else if (counter == 50) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
     }
+
+    public void addFunds(UserInfo ui) {
+        client.sendMessage(T.ADD_FUNDS + T.getJson(new String[]{"u", ui.getName(), "m", ui.getPwd()}).toString()); // pwd variable is used for funds for this call only
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.ADD_FUNDS_MESSAGE != null) {
+                if (T.ADD_FUNDS_MESSAGE.equals(T.SUCCESS)) {
+                    T.VIEW_TOAST(this.context, "Funds added.", Toast.LENGTH_LONG);
+                } else if (T.ADD_FUNDS_MESSAGE.equals(T.NOT_SUCCESS)) {
+                    T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
+                }
+                break;
+            } else if (counter == 50) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+        T.ADD_FUNDS_MESSAGE = null;
+    }
+
+    public void getBalance(UserInfo ui) {
+        client.sendMessage(T.BALANCE + T.getJson(new String[]{"u", ui.getName()}).toString());
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.BALANCE_MESSAGE != null) {
+                if (T.BALANCE_MESSAGE.equals(T.NOT_SUCCESS)) {
+                    T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                    break;
+                } else {
+                    System.out.println("****BALANCE****" + T.BALANCE_MESSAGE);
+                    T.VIEW_TOAST(this.context, "Get Balance Successful.", Toast.LENGTH_LONG);
+                    break;
+                }
+            } else if (counter == 50) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+    }
+
 
 }

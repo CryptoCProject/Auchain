@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityAuctionDetailsBinding;
 import com.sec.secureapp.general.InfoMessage;
+import com.sec.secureapp.general.ParticipatedAuctions;
 import com.sec.secureapp.general.ParticipationInfo;
 import com.sec.secureapp.general.T;
 
@@ -19,6 +20,7 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     private int auction_id;
     private String auctions = "";
+    private double price = 0;
 
     //0: open, 1: running, 2:finished
     private int type = 0;
@@ -35,7 +37,9 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
             binding.auctionObject.setText(bundle.getString("object"));
             binding.auctionAuctioneer.setText(bundle.getString("auctioneer"));
-            binding.auctionPrice.setText(getString(R.string.auction_price, Double.parseDouble(bundle.getString("price"))));
+            System.out.println("****BIDS "+bundle.getString("title")+" "+ParticipatedAuctions.bids.get(bundle.getString("title")));
+            price = Double.parseDouble(ParticipatedAuctions.bids.get(bundle.getString("title")));
+            binding.auctionPrice.setText(getString(R.string.auction_price, price));
             type = bundle.getInt("running");
             binding.auctionAction.setText((type == 1 ? "Bid" : "Participate"));
 
@@ -57,12 +61,13 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     // button action when in a running auction
     private void bid() {
+        new InfoMessage(this, T.BID, new ParticipationInfo(T.USER_ID, auction_id, price + price * 0.1)).start();
         T.VIEW_TOAST(getApplicationContext(), "Bid Confirmed", Toast.LENGTH_SHORT);
     }
 
     // button action when in an open auction
     private void participate() {
-        new InfoMessage(this, T.PARTICIPATE, new ParticipationInfo(T.USER_ID, auction_id)).start();
+        new InfoMessage(this, T.PARTICIPATE, new ParticipationInfo(T.USER_ID, auction_id, 0)).start();
         binding.auctionAction.setText("Already Participated");
         binding.auctionAction.setEnabled(false);
 

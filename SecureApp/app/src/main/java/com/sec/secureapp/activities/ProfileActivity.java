@@ -13,7 +13,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sec.secureapp.R;
 import com.sec.secureapp.databinding.ActivityProfileBinding;
+import com.sec.secureapp.general.InfoMessage;
 import com.sec.secureapp.general.T;
+import com.sec.secureapp.general.UserInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +53,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
         }
 
+        binding.profileId.setText(T.USER_ID);
+        binding.profileBalance.setText("Z " + T.BALANCE_MESSAGE);
         binding.profileShowAuctions.setOnClickListener(this);
         binding.profileAddFunds.setOnClickListener(this);
     }
@@ -72,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                T.VIEW_TOAST(getApplicationContext(), ""+which, Toast.LENGTH_SHORT);
+                                T.VIEW_TOAST(getApplicationContext(), "" + which, Toast.LENGTH_SHORT);
                                 Intent mIntent = new Intent(getApplicationContext(), AuctionDetailsActivity.class);
                                 mIntent.putExtra("title", auctionList.get(which).get("auction_id"));
                                 mIntent.putExtra("object", auctionList.get(which).get("object_name"));
@@ -90,15 +94,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 T.VIEW_TOAST(getApplicationContext(), "Add funds", Toast.LENGTH_SHORT);
                 new MaterialDialog.Builder(this)
                         .title(R.string.add_funds)
-                        .content(R.string.insert_amount)
+                        .content(R.string.insert_amount, Double.parseDouble(T.EXCHANGE_MESSAGE))
                         .inputType(InputType.TYPE_CLASS_NUMBER)
                         .input("5000", "100", new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 // Do something
                                 int funds = Integer.parseInt("" + input);
-                                double zafeirium = funds*0.00001;
-                                T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account "+zafeirium, Toast.LENGTH_LONG);
+                                new InfoMessage(getApplicationContext(), T.ADD_FUNDS, new UserInfo(T.USER_ID, "" + funds, null, null, null)).start(); // pwd is funds for this method
+                                double zafeirium = funds * Double.parseDouble(T.EXCHANGE_MESSAGE);
+                                T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account " + zafeirium, Toast.LENGTH_LONG);
                             }
                         })
                         .negativeText(R.string.cancel)
