@@ -55,11 +55,14 @@
     <!-- Profile Page -->
     <string name="profile_show_auctions">Show Auctions</string>
     <string name="profile_add_funds">Add Funds</string>
+    <string name="profile_balance">Z $%.4f</string>
 
     <!-- Broadcast Receivers -->
     <string name="open_receiver">com.sec.secureapp.OPEN_AUCTIONS</string>
     <string name="running_receiver">com.sec.secureapp.RUNNING_AUCTIONS</string>
     <string name="finished_receiver">com.sec.secureapp.FINISHED_AUCTIONS</string>
+    <string name="bid_changed">com.sec.secureapp.BID_CHANGED</string>
+    <string name="funds_changed">com.sec.secureapp.FUNDS_CHANGED</string>
 
     <!-- Dialogs -->
     <string name="progress_dialog">Downloading data…</string>

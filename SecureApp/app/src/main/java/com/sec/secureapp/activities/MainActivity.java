@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -53,14 +54,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int received_open = 0;
     int received_running = 0;
 
+    int tab_position = 0;
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         sendMessages();
         createDialog();
-        createReceivers();
+        //createReceivers();
 
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -111,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        binding.tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(binding.viewPager) {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                super.onTabSelected(tab);
+                tab_position = tab.getPosition();
+            }
+        });
         waitRefresh();
     }
 
@@ -211,8 +222,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        createReceivers();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceivers();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 
@@ -237,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (received_running == 1 && received_open == 1) {
 
-                unregisterReceivers();
+                //unregisterReceivers();
 
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
@@ -247,8 +270,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     binding.swipeRefreshLayout.setRefreshing(false);
                 }
 
+                int tab = tab_position;
                 setupViewPager(binding.viewPager);
                 binding.tabLayout.setupWithViewPager(binding.viewPager);//setting tab over viewpager
+                binding.tabLayout.getTabAt(tab).select();
             }
         }
     }
@@ -282,6 +307,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 }
                             })
                             .show();
+                }
+
+                if (binding.swipeRefreshLayout.isRefreshing()) {
+                    binding.swipeRefreshLayout.setRefreshing(false);
                 }
 
             }

@@ -1,6 +1,9 @@
 package com.sec.secureapp.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +20,8 @@ import com.sec.secureapp.general.T;
 public class AuctionDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityAuctionDetailsBinding binding;
+
+    BidChanged bidChanged;
 
     private int auction_id;
     private String auctions = "";
@@ -37,7 +42,6 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
             binding.auctionObject.setText(bundle.getString("object"));
             binding.auctionAuctioneer.setText(bundle.getString("auctioneer"));
-            System.out.println("****BIDS "+bundle.getString("title")+" "+ParticipatedAuctions.bids.get(bundle.getString("title")));
             price = Double.parseDouble(ParticipatedAuctions.bids.get(bundle.getString("title")));
             binding.auctionPrice.setText(getString(R.string.auction_price, price));
             type = bundle.getInt("running");
@@ -97,6 +101,36 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // filter used for receiver
+        IntentFilter filter = new IntentFilter();
+
+        // create a receiver for open auctions and wait response from server
+        bidChanged = new BidChanged();
+        filter.addAction(getString(R.string.bid_changed));
+        registerReceiver(bidChanged, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(bidChanged);
+    }
+
+    class BidChanged extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction() != null && intent.getAction().equals(getString(R.string.bid_changed))) {
+                price = Double.parseDouble(ParticipatedAuctions.bids.get(""+auction_id));
+                binding.auctionPrice.setText(getString(R.string.auction_price, price));
+            }
         }
     }
 }

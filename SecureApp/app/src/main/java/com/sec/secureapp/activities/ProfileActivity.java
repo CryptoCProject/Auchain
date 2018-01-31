@@ -1,6 +1,9 @@
 package com.sec.secureapp.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +31,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     ActivityProfileBinding binding;
 
+    FundsChanged fundsChanded;
+
     private String auctions = "";
     //variable to store auctions
     ArrayList<HashMap<String, String>> auctionList;
@@ -54,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         binding.profileId.setText(T.USER_ID);
-        binding.profileBalance.setText("Z " + T.BALANCE_MESSAGE);
+        binding.profileBalance.setText(getString(R.string.profile_balance, Double.parseDouble(T.BALANCE_MESSAGE)));
         binding.profileShowAuctions.setOnClickListener(this);
         binding.profileAddFunds.setOnClickListener(this);
     }
@@ -103,7 +108,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 int funds = Integer.parseInt("" + input);
                                 new InfoMessage(getApplicationContext(), T.ADD_FUNDS, new UserInfo(T.USER_ID, "" + funds, null, null, null)).start(); // pwd is funds for this method
                                 double zafeirium = funds * Double.parseDouble(T.EXCHANGE_MESSAGE);
-                                T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account " + zafeirium, Toast.LENGTH_LONG);
+                                T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account " + getString(R.string.profile_balance, zafeirium), Toast.LENGTH_LONG);
+                                new InfoMessage(getApplicationContext(), T.BALANCE, new UserInfo(T.USER_ID, null, null, null, null)).start();
                             }
                         })
                         .negativeText(R.string.cancel)
@@ -140,6 +146,35 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             auction.put("object_price", jObject.getString("p"));
 
             auctionList.add(auction);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // filter used for receiver
+        IntentFilter filter = new IntentFilter();
+
+        // create a receiver for open auctions and wait response from server
+        fundsChanded = new FundsChanged();
+        filter.addAction(getString(R.string.funds_changed));
+        registerReceiver(fundsChanded, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(fundsChanded);
+    }
+
+    class FundsChanged extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction() != null && intent.getAction().equals(getString(R.string.funds_changed))) {
+                binding.profileBalance.setText(getString(R.string.profile_balance, Double.parseDouble(T.BALANCE_MESSAGE)));
+            }
         }
     }
 }

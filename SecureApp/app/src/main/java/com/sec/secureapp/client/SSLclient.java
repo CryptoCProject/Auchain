@@ -1,6 +1,7 @@
 package com.sec.secureapp.client;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -139,9 +140,9 @@ public class SSLclient extends Thread {
         public void run() {
             Looper.prepare();
 
-            handler = new Handler() {
+            handler = new Handler(new Handler.Callback() {
                 @Override
-                public void handleMessage(Message msg) {
+                public boolean handleMessage(Message msg) {
                     Object obj = msg.obj;
                     System.out.println("Message came: " + obj);
                     if (obj instanceof String) {
@@ -166,16 +167,18 @@ public class SSLclient extends Thread {
                             T.PARTICIPATE_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.CONNECT_AUCTION_CONFIRM)) {
                             T.CONNECT_AUCTION_MESSAGE = s.substring(2);
-                        }else if (s.startsWith(T.BID_CONFIRM)) {
+                        } else if (s.startsWith(T.BID_CONFIRM)) {
                             T.BID_MESSAGE = s.substring(2);
                             String id = s.substring(3);
                             try {
                                 JSONObject jsonObject = new JSONObject(id);
                                 String price = jsonObject.getString("p");
                                 String auction_id = jsonObject.getString("i");
-                                T.VIEW_TOAST(context, "New Bid: "+price+" at "+auction_id, Toast.LENGTH_SHORT);
+                                T.VIEW_TOAST(context, "New Bid: " + price + " at " + auction_id, Toast.LENGTH_SHORT);
                                 ParticipatedAuctions.bids.put(auction_id, price);
-                                System.out.println("****BIDS "+auction_id+" "+ParticipatedAuctions.bids.get(auction_id));
+
+                                Intent i = new Intent("com.sec.secureapp.BID_CHANGED");
+                                context.sendBroadcast(i);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -190,8 +193,9 @@ public class SSLclient extends Thread {
                         }
                     }
 
+                    return false;
                 }
-            };
+            });
 
             Looper.loop();
         }

@@ -8,7 +8,6 @@ import com.sec.secureapp.activities.LoginActivity;
 import com.sec.secureapp.activities.MainActivity;
 import com.sec.secureapp.activities.OtpActivity;
 import com.sec.secureapp.client.SSLclient;
-import com.sec.secureapp.database.DB;
 import com.sec.secureapp.security.Hashing;
 
 public class InfoMessage extends Thread {
@@ -330,7 +329,8 @@ public class InfoMessage extends Thread {
             counter++;
             if (T.ADD_FUNDS_MESSAGE != null) {
                 if (T.ADD_FUNDS_MESSAGE.equals(T.SUCCESS)) {
-                    T.VIEW_TOAST(this.context, "Funds added.", Toast.LENGTH_LONG);
+                    //T.VIEW_TOAST(this.context, "Funds added.", Toast.LENGTH_LONG);
+                    System.out.println("Funds added.");
                 } else if (T.ADD_FUNDS_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
@@ -354,8 +354,11 @@ public class InfoMessage extends Thread {
                     T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                     break;
                 } else {
-                    System.out.println("****BALANCE****" + T.BALANCE_MESSAGE);
-                    T.VIEW_TOAST(this.context, "Get Balance Successful.", Toast.LENGTH_LONG);
+                    //T.VIEW_TOAST(this.context, "Get Balance Successful.", Toast.LENGTH_LONG);
+                    System.out.println("Get balance successful.");
+
+                    Intent i = new Intent("com.sec.secureapp.FUNDS_CHANGED");
+                    context.sendBroadcast(i);
                     break;
                 }
             } else if (counter == 50) {

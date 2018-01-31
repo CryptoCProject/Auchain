@@ -18,7 +18,8 @@ import java.util.HashMap;
 public class T {
 
     public static DB DB;
-    public static String USER_ID = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc="; // Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=
+    public static String USER_ID = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc=";
+    //public static String USER_ID = "Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=";
     public static AuctionConnection AC;
 
     public static String SERVER_IP = "zafeiratosv.ddns.net";//"zafeiratosv.ddns.net";
