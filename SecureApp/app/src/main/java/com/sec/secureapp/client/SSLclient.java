@@ -188,7 +188,6 @@ public class SSLclient extends Thread {
                         } else if (s.startsWith(T.ADD_FUNDS_CONFIRM)) {
                             T.ADD_FUNDS_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.BALANCE_CONFIRM)) {
-
                             T.BALANCE_MESSAGE = s.substring(2);
                         }
                     }

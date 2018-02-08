@@ -186,7 +186,13 @@ public class InfoMessage extends Thread {
             if (T.OPEN_AUCTIONS_MESSAGE != null) {
                 if (T.OPEN_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
-                } else {
+                } else if (T.OPEN_AUCTIONS_MESSAGE.equals(T.AUCTION_EMPTY)) {
+                    Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
+                    i.putExtra("getAuctions", "");
+                    i.putExtra("running", false);
+                    context.sendBroadcast(i);
+                    break;
+                }else {
                     String data = T.OPEN_AUCTIONS_MESSAGE;
                     Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
                     i.putExtra("getAuctions", data);
@@ -212,6 +218,12 @@ public class InfoMessage extends Thread {
             if (T.RUNNING_AUCTIONS_MESSAGE != null) {
                 if (T.RUNNING_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
+                } else if (T.RUNNING_AUCTIONS_MESSAGE.equals(T.AUCTION_EMPTY)) {
+                    Intent i = new Intent("com.sec.secureapp.RUNNING_AUCTIONS");
+                    i.putExtra("getAuctions", "");
+                    i.putExtra("running", true);
+                    context.sendBroadcast(i);
+                    break;
                 } else {
                     String data = T.RUNNING_AUCTIONS_MESSAGE;
                     Intent i = new Intent("com.sec.secureapp.RUNNING_AUCTIONS");

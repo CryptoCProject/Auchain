@@ -18,11 +18,11 @@ import java.util.HashMap;
 public class T {
 
     public static DB DB;
-    public static String USER_ID = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc=";
-    //public static String USER_ID = "Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=";
+    //public static String USER_ID;// = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc=";
+    public static String USER_ID = "Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=";
     public static AuctionConnection AC;
 
-    public static String SERVER_IP = "zafeiratosv.ddns.net";//"zafeiratosv.ddns.net";
+    public static String SERVER_IP = "10.25.184.65";//"zafeiratosv.ddns.net";//"zafeiratosv.ddns.net";
     public static int SERVER_PORT = 54321;
     public static String CERT_NAME = "sslsec.bks";
 
@@ -38,6 +38,7 @@ public class T {
     public static String AUCTION_WAITING = "10";
     public static String AUCTION_RUNNING = "11";
     public static String AUCTION_FINISHED = "12";
+    public static String AUCTION_EMPTY = "13";
 
     public static String SIGN_UP = " a";
     public static String SIGN_UP_CONFIRM = " b";
@@ -78,6 +79,8 @@ public class T {
     public static String BALANCE = " y";
 
     public static String BALANCE_CONFIRM = " z";
+
+    public static String TRANSACTION = " 0";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;

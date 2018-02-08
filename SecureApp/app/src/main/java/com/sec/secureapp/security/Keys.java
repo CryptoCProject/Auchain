@@ -6,6 +6,7 @@ import java.io.File;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
@@ -82,6 +83,18 @@ public class Keys {
             ex.printStackTrace();
         }
         return new String(dectyptedText);
+    }
+
+    public static String sign(String message, PrivateKey privateKey){
+        try {
+            Signature signer = Signature.getInstance("SHA256withRSA");
+            signer.initSign(privateKey);
+            signer.update(message.getBytes());
+            return Base64.encodeToString(signer.sign(), Base64.NO_WRAP);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
