@@ -71,8 +71,8 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
         if (Double.parseDouble(T.BALANCE_MESSAGE) - bidPrice >= 0) {
             new InfoMessage(this, T.BID, new ParticipationInfo(T.USER_ID, auction_id, bidPrice)).start();
             T.VIEW_TOAST(getApplicationContext(), "Bid Confirmed", Toast.LENGTH_SHORT);
-        }
-        else T.VIEW_TOAST(this, "Insufficient balance, please add more funds to your account.", Toast.LENGTH_LONG);
+        } else
+            T.VIEW_TOAST(this, "Insufficient balance, please add more funds to your account.", Toast.LENGTH_LONG);
     }
 
     // button action when in an open auction

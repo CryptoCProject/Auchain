@@ -55,7 +55,7 @@
     <!-- Profile Page -->
     <string name="profile_show_auctions">Show Auctions</string>
     <string name="profile_add_funds">Add Funds</string>
-    <string name="profile_balance">Z $%.4f</string>
+    <string name="profile_balance">Z %.4f</string>
 
     <!-- Broadcast Receivers -->
     <string name="open_receiver">com.sec.secureapp.OPEN_AUCTIONS</string>
@@ -72,6 +72,7 @@
     <string name="cancel">Cancel</string>
     <string name="went_wrong">Something went wrong :(.. Please refresh.</string>
     <string name="finished">Finished Auctions</string>
+    <string name="empty_finished">There are no finished auctions :(</string>
     <string name="add_funds">Add Funds</string>
     <string name="insert_amount">Insert the amount you wish: \n$ 1.00 -> Z $%.5f</string>
 

@@ -11,6 +11,8 @@ import com.sec.secureapp.security.Keys;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import auctioneum.blockchain.Transaction;
+
 public class AuctionConnection extends Thread {
 
     private Context context;
@@ -51,11 +53,13 @@ public class AuctionConnection extends Thread {
                         String tr_id = jsonObject.getString("i");
                         if (T.USER_ID.equals(auctioneer_id)) {
                             String signature = Keys.sign(transaction, T.DB.getPrivateKey(T.USER_ID));
-                            client.sendMessage(T.TRANSACTION + T.getJson(new String[]{"r", "a", "s", signature, "i", T.USER_ID, "t", tr_id}).toString());
+//                            client.sendMessage(T.TRANSACTION + T.getJson(new String[]{"r", "a", "s", signature, "i", T.USER_ID, "t", tr_id}).toString());
+                            client.sendMessage(new Transaction(tr_id, null, T.USER_ID, signature));
                         }
                         if (T.USER_ID.equals(winner_id)) {
                             String signature = Keys.sign(transaction, T.DB.getPrivateKey(T.USER_ID));
-                            client.sendMessage(T.TRANSACTION + T.getJson(new String[]{"r", "w", "s", signature, "i", T.USER_ID, "t", tr_id}).toString());
+//                            client.sendMessage(T.TRANSACTION + T.getJson(new String[]{"r", "w", "s", signature, "i", T.USER_ID, "t", tr_id}).toString());
+                            client.sendMessage(new Transaction(tr_id, T.USER_ID, null, signature));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -66,7 +70,7 @@ public class AuctionConnection extends Thread {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                     break;
                 }
-                //T.CONNECT_AUCTION_MESSAGE = null;
+                T.CONNECT_AUCTION_MESSAGE = null;
             }
         }
         this.client.closeCrap();

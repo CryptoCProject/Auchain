@@ -54,7 +54,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         this.auctions = intent.getStringExtra("auctions");
 
         try {
-            jsonToObject(this.auctions);
+            if (!this.auctions.equals(""))
+                jsonToObject(this.auctions);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -75,26 +76,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.profile_show_auctions:
-                T.VIEW_TOAST(getApplicationContext(), "Show Previous Auctions", Toast.LENGTH_SHORT);
-                new MaterialDialog.Builder(this)
-                        .title(R.string.finished)
-                        .items(auctionIds)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                T.VIEW_TOAST(getApplicationContext(), "" + which, Toast.LENGTH_SHORT);
-                                Intent mIntent = new Intent(getApplicationContext(), AuctionDetailsActivity.class);
-                                mIntent.putExtra("title", auctionList.get(which).get("auction_id"));
-                                mIntent.putExtra("object", auctionList.get(which).get("object_name"));
-                                mIntent.putExtra("auctioneer", auctionList.get(which).get("auctioneer_id"));
-                                mIntent.putExtra("price", auctionList.get(which).get("object_price"));
-                                mIntent.putExtra("participated", auctionList.get(which).get("participated"));
-                                mIntent.putExtra("running", 2);
-                                mIntent.putExtra("auctions", auctions);
-                                startActivity(mIntent);
-                            }
-                        })
-                        .show();
+                if (!this.auctions.equals("")) {
+                    T.VIEW_TOAST(getApplicationContext(), "Show Previous Auctions", Toast.LENGTH_SHORT);
+                    new MaterialDialog.Builder(this)
+                            .title(R.string.finished)
+                            .items(auctionIds)
+                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                @Override
+                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    Intent mIntent = new Intent(getApplicationContext(), AuctionDetailsActivity.class);
+                                    mIntent.putExtra("title", auctionList.get(which).get("auction_id"));
+                                    mIntent.putExtra("object", auctionList.get(which).get("object_name"));
+                                    mIntent.putExtra("auctioneer", auctionList.get(which).get("auctioneer_id"));
+                                    mIntent.putExtra("price", auctionList.get(which).get("object_price"));
+                                    mIntent.putExtra("participated", auctionList.get(which).get("participated"));
+                                    mIntent.putExtra("running", 2);
+                                    mIntent.putExtra("auctions", auctions);
+                                    startActivity(mIntent);
+                                }
+                            })
+                            .show();
+                } else {
+                    new MaterialDialog.Builder(this)
+                            .title(R.string.finished)
+                            .content(R.string.empty_finished)
+                            .show();
+                }
                 break;
             case R.id.profile_add_funds:
                 new MaterialDialog.Builder(this)
@@ -143,7 +150,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             HashMap<String, String> auction = new HashMap<>();
 
             // store ids only
-            auctionIds[i] = jObject.getString("a");
+            auctionIds[i] = "Auction id: "+jObject.getString("a");
 
             auction.put("auction_id", jObject.getString("a"));
             auction.put("auctioneer_id", jObject.getString("i"));
@@ -161,7 +168,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         // filter used for receiver
         IntentFilter filter = new IntentFilter();
 
-        // create a receiver for open auctions and wait response from server
+        // create a receiver for funds change and wait response from server
         fundsChanded = new FundsChanged();
         filter.addAction(getString(R.string.funds_changed));
         registerReceiver(fundsChanded, filter);

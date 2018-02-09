@@ -41,6 +41,8 @@ public class InfoMessage extends Thread {
             getOpenAuctions();
         } else if (this._case.equals(T.RUNNING_AUCTIONS)) {
             getRunningAuctions((UserInfo) messageInfo);
+        } else if (this._case.equals(T.FINISHED_AUCTIONS)) {
+            getFinishedAuctions((UserInfo) messageInfo);
         } else if (this._case.equals(T.CREATE_AUCTION)) {
             createAuction((AuctionInfo) messageInfo);
         } else if (this._case.equals(T.PARTICIPATE)) {
@@ -88,14 +90,14 @@ public class InfoMessage extends Thread {
                                 T.VIEW_TOAST(this.context, "Unsuccessful registration. Something went wrong with the server. Try again please.", Toast.LENGTH_LONG);
                             }
                             break;
-                        } else if (counter == 50) {
+                        } else if (counter == 100) {
                             T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                             break;
                         }
                     }
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -121,7 +123,7 @@ public class InfoMessage extends Thread {
                     T.VIEW_TOAST(this.context, "Wrong user name or password. Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            } else if (counter == 80) {
+            } else if (counter == 120) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -150,7 +152,7 @@ public class InfoMessage extends Thread {
                     this.context.startActivity(intent);
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -169,7 +171,7 @@ public class InfoMessage extends Thread {
                 i.putExtra("message", T.MAIN_MESSAGE);
                 context.sendBroadcast(i);
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -201,7 +203,7 @@ public class InfoMessage extends Thread {
                     break;
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -233,12 +235,42 @@ public class InfoMessage extends Thread {
                     break;
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
         }
         T.RUNNING_AUCTIONS_MESSAGE = null;
+    }
+
+    private void getFinishedAuctions(UserInfo ui) {
+        client.sendMessage(T.FINISHED_AUCTIONS + T.getJson(new String[]{"u", ui.getName()}).toString());
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.FINISHED_AUCTIONS_MESSAGE != null) {
+                if (T.FINISHED_AUCTIONS_MESSAGE.equals(T.AUCTION_ERROR)) {
+                    T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
+                } else if (T.FINISHED_AUCTIONS_MESSAGE.equals(T.AUCTION_EMPTY)) {
+                    Intent i = new Intent("com.sec.secureapp.FINISHED_AUCTIONS");
+                    i.putExtra("getAuctions", "");
+                    context.sendBroadcast(i);
+                    break;
+                } else {
+                    String data = T.FINISHED_AUCTIONS_MESSAGE;
+                    Intent i = new Intent("com.sec.secureapp.FINISHED_AUCTIONS");
+                    i.putExtra("getAuctions", data);
+                    context.sendBroadcast(i);
+                    break;
+                }
+                break;
+            } else if (counter == 100) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+        T.FINISHED_AUCTIONS_MESSAGE = null;
     }
 
     private void createAuction(AuctionInfo ui) {
@@ -261,7 +293,7 @@ public class InfoMessage extends Thread {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -285,7 +317,7 @@ public class InfoMessage extends Thread {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -309,7 +341,7 @@ public class InfoMessage extends Thread {
                 }
                 break;
             }
-            else if (counter == 50) {
+            else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -327,7 +359,7 @@ public class InfoMessage extends Thread {
                 //T.VIEW_TOAST(this.context, "Exchange done.", Toast.LENGTH_LONG);
                 System.out.println("Exchange done.");
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -347,7 +379,7 @@ public class InfoMessage extends Thread {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -373,7 +405,7 @@ public class InfoMessage extends Thread {
                     context.sendBroadcast(i);
                     break;
                 }
-            } else if (counter == 50) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }

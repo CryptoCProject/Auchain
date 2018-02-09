@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // wait for answer from server with data
     AuctionReceiver runningAuctionReceiver;
     AuctionReceiver openAuctionReceiver;
+    AuctionReceiver finishedAuctionsReceiver;
 
     // string with json got from server
     String runningAuctions = "";
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int received_open = 0;
     int received_running = 0;
+    int received_finished = 0;
 
     int tab_position = 0;
 
@@ -147,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         runningAuctionReceiver = new AuctionReceiver();
         filter.addAction(getString(R.string.running_receiver));
         registerReceiver(runningAuctionReceiver, filter);
+
+        // create a receiver for finished auctions and wait response from server
+        finishedAuctionsReceiver = new AuctionReceiver();
+        filter.addAction(getString(R.string.finished_receiver));
+        registerReceiver(finishedAuctionsReceiver, filter);
     }
 
     private void createDialog() {
@@ -162,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // send message to server for open and running auctions
         new InfoMessage(this, T.OPEN_AUCTIONS, new UserInfo(null, null, null, null, null)).start();
         new InfoMessage(this, T.RUNNING_AUCTIONS, new UserInfo(T.USER_ID, null, null, null, null)).start();
+        new InfoMessage(this, T.FINISHED_AUCTIONS, new UserInfo(T.USER_ID, null, null, null, null)).start();
         new InfoMessage(this, T.EXCHANGE, null).start();
         new InfoMessage(this, T.BALANCE, new UserInfo(T.USER_ID, null, null, null, null)).start();
     }
@@ -202,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.action_profile:
                 intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("auctions", openAuctions); //send finished auctions
+                intent.putExtra("auctions", finishedAuctions); //send finished auctions
                 this.startActivity(intent);
                 break;
             case R.id.action_logout:
@@ -242,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void unregisterReceivers() {
         unregisterReceiver(openAuctionReceiver);
         unregisterReceiver(runningAuctionReceiver);
+        unregisterReceiver(finishedAuctionsReceiver);
     }
 
     class AuctionReceiver extends BroadcastReceiver {
@@ -249,13 +258,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            //TODO: Add finished
             if (intent.getAction() != null && intent.getAction().equals(getString(R.string.open_receiver)) && received_open == 0) {
                 openAuctions = intent.getStringExtra("getAuctions");
                 received_open++;
             } else if ((intent.getAction() != null && intent.getAction().equals(getString(R.string.running_receiver)) && received_running == 0)) {
                 runningAuctions = intent.getStringExtra("getAuctions");
                 received_running++;
+            } else if ((intent.getAction() != null && intent.getAction().equals(getString(R.string.finished_receiver)) && received_finished == 0)) {
+                finishedAuctions = intent.getStringExtra("getAuctions");
+                received_finished++;
             }
 
             if (received_running == 1 && received_open == 1) {

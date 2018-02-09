@@ -101,7 +101,7 @@ public class SSLclient extends Thread {
                 System.out.println("close in");
                 in.close();
             }
-            if (connection != null) {
+            if (connection != null && !connection.isClosed()) {
                 System.out.println("close connection");
                 connection.close();
             }
@@ -189,6 +189,8 @@ public class SSLclient extends Thread {
                             T.ADD_FUNDS_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.BALANCE_CONFIRM)) {
                             T.BALANCE_MESSAGE = s.substring(2);
+                        } else if (s.startsWith(T.FINISHED_AUCTIONS_CONFIRM)) {
+                            T.FINISHED_AUCTIONS_MESSAGE = s.substring(2);
                         }
                     }
 

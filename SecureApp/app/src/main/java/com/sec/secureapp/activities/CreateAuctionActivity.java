@@ -125,7 +125,6 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        System.out.println("****" + charSequence);
         if (!charSequence.toString().equals(current)) {
             binding.createPrice.removeTextChangedListener(this);
 
@@ -151,7 +150,6 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
 
     class TypeSpinner implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-            Toast.makeText(v.getContext(), "Your choose :" + type[position], Toast.LENGTH_SHORT).show();
         }
 
         @Override
