@@ -4,43 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:background="@color/colorWindowBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWindowBackground"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="50dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="50dp">
+
             <ImageView
-                android:layout_marginTop="45dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/ic_person"/>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dp"
+                android:src="@drawable/ic_person" />
+
             <TextView
                 android:id="@+id/profile_name"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:text="Account Name"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:textSize="21sp"/>
+                android:textSize="21sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="50dp">
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp">
 
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_assignment_ind"/>
+                android:src="@drawable/ic_assignment_ind" />
 
             <TextView
                 android:id="@+id/profile_id"
@@ -48,20 +51,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
-                android:text="Account ID"/>
+                android:text="Account ID"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="50dp"
+            android:paddingRight="50dp"
             android:paddingTop="10dp">
 
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_account_balance_wallet"/>
+                android:src="@drawable/ic_account_balance_wallet" />
 
             <TextView
                 android:id="@+id/profile_balance"
@@ -69,21 +73,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
-                android:text="Account Balance"/>
+                android:text="Account Balance"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
             android:paddingLeft="50dp"
-            android:paddingBottom="20dp">
+            android:paddingRight="50dp"
+            android:paddingTop="10dp">
 
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_email"/>
+                android:src="@drawable/ic_email" />
 
             <TextView
                 android:id="@+id/profile_mail"
@@ -91,8 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="20dp"
-                android:textColor="@android:color/white"
-                android:text="Account Mail"/>
+                android:text="Account Mail"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,20 +106,20 @@
             android:gravity="center">
 
             <Button
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/profile_add_funds"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/profile_add_funds"/>
+                android:text="@string/profile_add_funds" />
 
             <Button
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/profile_show_auctions"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/profile_show_auctions"/>
+                android:text="@string/profile_show_auctions" />
 
         </LinearLayout>
 

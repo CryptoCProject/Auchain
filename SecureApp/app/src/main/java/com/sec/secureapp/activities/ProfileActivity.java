@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -112,10 +113,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 // Do something
+                                new MyTask().execute();
                                 int funds = Integer.parseInt("" + input);
                                 new InfoMessage(getApplicationContext(), T.ADD_FUNDS, new UserInfo(T.USER_ID, "" + funds, null, null, null)).start(); // pwd is funds for this method
-                                double zafeirium = funds * Double.parseDouble(T.EXCHANGE_MESSAGE);
-                                //T.VIEW_TOAST(getApplicationContext(), "Zafeirium added to account " + getString(R.string.profile_balance, zafeirium), Toast.LENGTH_LONG);
+                                binding.profileAddFunds.setEnabled(false);
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -187,7 +188,27 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             if (intent.getAction() != null && intent.getAction().equals(getString(R.string.funds_changed))) {
                 binding.profileBalance.setText(getString(R.string.profile_balance, Double.parseDouble(T.BALANCE_MESSAGE)));
+                binding.profileAddFunds.setEnabled(true);
             }
+        }
+    }
+
+    class MyTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            binding.profileAddFunds.setEnabled(true);
         }
     }
 }

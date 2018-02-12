@@ -5,24 +5,21 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
-import com.sec.secureapp.client.SSLclient;
 import com.sec.secureapp.database.DB;
-import com.sec.secureapp.security.Keys;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class T {
 
     public static DB DB;
-    public static String USER_ID;// = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc=";
-    //public static String USER_ID = "Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=";
+    //public static String USER_ID;// = "gcxbFwGGdLQBtC81uge7eeIRI5wjv/5ljaFXfj5kaHc=";
+    public static String USER_ID = "Yb5VqOL2tOFyM4vd8YTW2+4pyYhT4KBIXs7n8nua8LQ=";
     public static AuctionConnection AC;
 
-    public static String SERVER_IP = "10.25.184.65";//"zafeiratosv.ddns.net";
+    public static String SERVER_IP = "zafeiratosv.ddns.net";//"zafeiratosv.ddns.net";
     public static int SERVER_PORT = 54321;
     public static String CERT_NAME = "sslsec.bks";
 
@@ -119,16 +116,11 @@ public class T {
     public static JSONObject getJson(String... strings) {
         JSONObject jo = new JSONObject();
         HashMap<String, String> map = new HashMap<>();
-        int i = 0;
         try {
-            for (; ; ) {
-                try {
-                    map.put(strings[i], strings[i + 1]);
-                    i += 2;
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    break;
-                }
+            for (int i = 0; i < strings.length; i+=2) {
+                map.put(strings[i], strings[i+1]);
             }
+
             for (String k : map.keySet()) {
                 jo.put(k, map.get(k));
             }

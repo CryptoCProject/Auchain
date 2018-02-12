@@ -38,7 +38,7 @@
     <!-- Auction Details-->
     <string name="auction_object">Object: %s</string>
     <string name="auction_auctioneer">Auctioneer ID: %s</string>
-    <string name="auction_price">Price: $%.2f</string>
+    <string name="auction_price">Price: Z %.2f</string>
     <string name="auction_participate">Participate</string>
 
     <!-- Create Auctions -->

@@ -194,7 +194,7 @@ public class InfoMessage extends Thread {
                     i.putExtra("running", false);
                     context.sendBroadcast(i);
                     break;
-                }else {
+                } else {
                     String data = T.OPEN_AUCTIONS_MESSAGE;
                     Intent i = new Intent("com.sec.secureapp.OPEN_AUCTIONS");
                     i.putExtra("getAuctions", data);
@@ -328,20 +328,18 @@ public class InfoMessage extends Thread {
     public void bid(ParticipationInfo ui) {
         client.sendMessage(T.BID + T.getJson(new String[]{"u", ui.getParticipant_id(), "i", String.valueOf(ui.getAuction_id()), "p", String.valueOf(ui.getPrice())}).toString());
         int counter = 0;
-        for (;;){
+        for (; ; ) {
             T.SLEEP(100);
             counter++;
             if (T.BID_MESSAGE != null) {
-                String mes = T.BID_MESSAGE.substring(0,1);
+                String mes = T.BID_MESSAGE.substring(0, 1);
                 if (mes.equals(T.SUCCESS)) {
-//                    T.VIEW_TOAST(this.context, "New bid: " +  T.BID_MESSAGE.substring(1), Toast.LENGTH_LONG);
-                }
-                else if (mes.equals(T.NOT_SUCCESS)) {
+                    T.VIEW_TOAST(this.context, "Bid Confirmed", Toast.LENGTH_SHORT);
+                } else if (mes.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }
                 break;
-            }
-            else if (counter == 100) {
+            } else if (counter == 100) {
                 T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
                 break;
             }
@@ -374,7 +372,7 @@ public class InfoMessage extends Thread {
             counter++;
             if (T.ADD_FUNDS_MESSAGE != null) {
                 if (T.ADD_FUNDS_MESSAGE.equals(T.SUCCESS)) {
-                    T.VIEW_TOAST(this.context, "Zafeirium added to account "+(Double.parseDouble(ui.getPwd())*Double.parseDouble(T.EXCHANGE_MESSAGE)), Toast.LENGTH_LONG);
+                    T.VIEW_TOAST(this.context, "Zafeirium added to account " + (Double.parseDouble(ui.getPwd()) * Double.parseDouble(T.EXCHANGE_MESSAGE)), Toast.LENGTH_LONG);
                 } else if (T.ADD_FUNDS_MESSAGE.equals(T.NOT_SUCCESS)) {
                     T.VIEW_TOAST(this.context, "Server not responding . Try again please.", Toast.LENGTH_LONG);
                 }

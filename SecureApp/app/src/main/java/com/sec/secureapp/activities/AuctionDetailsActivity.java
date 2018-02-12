@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,6 +27,7 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
     private int auction_id;
     private String auctions = "";
     private double price = 0;
+    double bidPrice = 0;
 
     //0: open, 1: running, 2:finished
     private int type = 0;
@@ -65,12 +67,13 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
 
     // button action when in a running auction
     private void bid() {
-        double bidPrice = price + price * 0.1;
+        bidPrice = price + price * 0.1;
 
         // check if the balance is sufficient
         if (Double.parseDouble(T.BALANCE_MESSAGE) - bidPrice >= 0) {
             new InfoMessage(this, T.BID, new ParticipationInfo(T.USER_ID, auction_id, bidPrice)).start();
-            T.VIEW_TOAST(getApplicationContext(), "Bid Confirmed", Toast.LENGTH_SHORT);
+            binding.auctionAction.setEnabled(false);
+            new MyTask().execute();
         } else
             T.VIEW_TOAST(this, "Insufficient balance, please add more funds to your account.", Toast.LENGTH_LONG);
     }
@@ -134,9 +137,30 @@ public class AuctionDetailsActivity extends AppCompatActivity implements View.On
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction() != null && intent.getAction().equals(getString(R.string.bid_changed))) {
+                //T.BALANCE_MESSAGE = Double.toString(Double.parseDouble(T.BALANCE_MESSAGE) - bidPrice);
                 price = Double.parseDouble(ParticipatedAuctions.bids.get("" + auction_id));
                 binding.auctionPrice.setText(getString(R.string.auction_price, price));
+                binding.auctionAction.setEnabled(true);
             }
+        }
+    }
+
+    class MyTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            binding.auctionAction.setEnabled(true);
         }
     }
 }
