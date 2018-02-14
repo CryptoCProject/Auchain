@@ -191,7 +191,8 @@ public class SSLclient extends Thread {
                             T.BALANCE_MESSAGE = s.substring(2);
                         } else if (s.startsWith(T.FINISHED_AUCTIONS_CONFIRM)) {
                             T.FINISHED_AUCTIONS_MESSAGE = s.substring(2);
-                        }
+                        } else if (s.startsWith(T.BLOCKCHAIN)) {
+                            T.BLOCKCHAIN_MESSAGE = s.substring(2);
                     }
 
                     return false;

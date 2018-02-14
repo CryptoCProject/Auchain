@@ -34,12 +34,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     ActivityProfileBinding binding;
 
     FundsChanged fundsChanded;
-
+    BlockChain blockChain;
+    
     private String auctions = "";
     //variable to store auctions
     ArrayList<HashMap<String, String>> auctionList;
 
     String[] auctionIds;
+    private MaterialDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         binding.profileBalance.setText(getString(R.string.profile_balance, Double.parseDouble(T.BALANCE_MESSAGE)));
         binding.profileShowAuctions.setOnClickListener(this);
         binding.profileAddFunds.setOnClickListener(this);
+        binding.profileBlockchain.setOnClickListener(this);
     }
 
     @Override
@@ -135,6 +138,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         })
                         .show();
                 break;
+            case R.id.profile_blockchain:
+                new InfoMessage(this, T.BLOCKCHAIN, null).start();
+                progressDialog = new MaterialDialog.Builder(this)
+                        .title(R.string.blockchain)
+                        .content(R.string.progress_dialog)
+                        .progress(true, 0)
+                        .show();
+                break;
             default:
                 break;
         }
@@ -173,12 +184,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         fundsChanded = new FundsChanged();
         filter.addAction(getString(R.string.funds_changed));
         registerReceiver(fundsChanded, filter);
+
+        blockChain = new BlockChain();
+        filter.addAction(getString(R.string.blockchain));
+        registerReceiver(blockChain, filter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(fundsChanded);
+        unregisterReceiver(blockChain);
     }
 
     class FundsChanged extends BroadcastReceiver {
@@ -189,6 +205,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             if (intent.getAction() != null && intent.getAction().equals(getString(R.string.funds_changed))) {
                 binding.profileBalance.setText(getString(R.string.profile_balance, Double.parseDouble(T.BALANCE_MESSAGE)));
                 binding.profileAddFunds.setEnabled(true);
+            }
+        }
+    }
+
+    class BlockChain extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction() != null && intent.getAction().equals(getString(R.string.blockchain_receiver))) {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                new MaterialDialog.Builder(context)
+                        .title(R.string.blockchain)
+                        .content(T.BLOCKCHAIN_MESSAGE)
+                        .show();
             }
         }
     }

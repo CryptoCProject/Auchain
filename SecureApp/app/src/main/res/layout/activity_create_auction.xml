@@ -111,7 +111,7 @@
                 android:inputType="numberSigned"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@android:color/white"
-                android:hint="Minimum Participants" />
+                android:hint="Minimum Participants (Default: 2)" />
 
         </android.support.design.widget.TextInputLayout>
 

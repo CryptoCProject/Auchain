@@ -209,7 +209,7 @@ public class CreateAuctionActivity extends AppCompatActivity implements AdapterV
                 T.VIEW_TOAST(getApplicationContext(), selectedHour + ":" + selectedMinute, Toast.LENGTH_SHORT);
             }
         }, hour, minute, true);//Yes 24 hour time
-        mTimePicker.setTitle("Select Time");
+        mTimePicker.setTitle("Select Time (Default: 20s)");
         mTimePicker.show();
     }
 }

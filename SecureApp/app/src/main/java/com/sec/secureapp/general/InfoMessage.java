@@ -55,6 +55,8 @@ public class InfoMessage extends Thread {
             addFunds((UserInfo) messageInfo);
         } else if (this._case.equals(T.BALANCE)) {
             getBalance((UserInfo) messageInfo);
+        } else if (this._case.equals(T.BLOCKCHAIN)) {
+            getBlockchain();
         }
         client.closeCrap();
     }
@@ -410,5 +412,21 @@ public class InfoMessage extends Thread {
         }
     }
 
-
+    public void getBlockchain() {
+        client.sendMessage(T.BLOCKCHAIN);
+        int counter = 0;
+        for (; ; ) {
+            T.SLEEP(100);
+            counter++;
+            if (T.BLOCKCHAIN_MESSAGE != null) {
+                System.out.println("Blockchain done.");
+                Intent i = new Intent("com.sec.secureapp.BLOCKCHAIN");
+                context.sendBroadcast(i);
+                break;
+            } else if (counter == 100) {
+                T.VIEW_TOAST(this.context, "Server not responding. Try again please.", Toast.LENGTH_LONG);
+                break;
+            }
+        }
+    }
 }

@@ -53,8 +53,9 @@
     <string name="create_auction_submit">Submit</string>
 
     <!-- Profile Page -->
-    <string name="profile_show_auctions">Show Auctions</string>
+    <string name="profile_show_auctions">Finished Auctions</string>
     <string name="profile_add_funds">Add Funds</string>
+    <string name="profile_blockchain">Show Blockchain</string>
     <string name="profile_balance">Z %.4f</string>
 
     <!-- Broadcast Receivers -->
@@ -63,6 +64,7 @@
     <string name="finished_receiver">com.sec.secureapp.FINISHED_AUCTIONS</string>
     <string name="bid_changed">com.sec.secureapp.BID_CHANGED</string>
     <string name="funds_changed">com.sec.secureapp.FUNDS_CHANGED</string>
+    <string name="blockchain_receiver">com.sec.secureapp.BLOCKCHAIN</string>
 
     <!-- Dialogs -->
     <string name="progress_dialog">Downloading data…</string>
@@ -74,6 +76,7 @@
     <string name="finished">Finished Auctions</string>
     <string name="empty_finished">There are no finished auctions :(</string>
     <string name="add_funds">Add Funds</string>
+    <string name="blockchain">Blockchain</string>
     <string name="insert_amount">Insert the amount you wish: \n$ 1.00 -> Z $%.5f</string>
 
     <!-- RecyclerView -->

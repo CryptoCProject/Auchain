@@ -73,14 +73,16 @@ public class T {
     public static String ADD_FUNDS = " w";
 
     public static String ADD_FUNDS_CONFIRM = " x";
-    public static String BALANCE = " y";
 
+    public static String BALANCE = " y";
     public static String BALANCE_CONFIRM = " z";
 
     public static String TRANSACTION = " 0";
 
     public static String FINISHED_AUCTIONS = " 1";
     public static String FINISHED_AUCTIONS_CONFIRM = " 2";
+
+    public static String BLOCKCHAIN = " 3";
 
     public static String SIGN_UP_MESSAGE = null;
     public static String LOG_IN_MESSAGE = null;
@@ -96,6 +98,7 @@ public class T {
     public static String EXCHANGE_MESSAGE = null;
     public static String ADD_FUNDS_MESSAGE = null;
     public static String BALANCE_MESSAGE = null;
+    public static String BLOCKCHAIN_MESSAGE = null;
 
     public static void VIEW_TOAST(final Context con, final String toast, final int dur) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
